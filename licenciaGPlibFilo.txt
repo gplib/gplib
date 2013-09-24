@@ -1,0 +1,81 @@
+Contrato de Licencia de Software GPLIB FILO
+1. AVISO GENERAL
+2. DEFINICIONES
+3. DERECHOS DE PROPIEDAD INTELECTUAL
+a. CODIGO FUENTE
+b. DERECHO DE AUTOR
+c. VERSION 0
+4. PERMISOS Y RESTRICCIONES
+a. COPIAS
+b. MODIFICACIONES
+c. ACTUALIZACIONES
+d. LIMITACIONES
+5. GARANTIA
+6. RESPONSABILIDADES
+7. VALIDEZ Y COMPATIBILIDAD CON OTRAS LICENCIAS
+8. IDENTIFICACIÓN
+9. TABLA DE COMPATIBILIDADES
+10. TRIBUNALES
+
+CONTRATO DE LICENCIAS GPLIB FILO
+
+1. AVISO GENERAL
+Es necesaria la lectura de buena fe y utilizando la mayor racionabilidad para interpretar el presente contrato. Especialmente al descargar, copiar, instalar, reenviar, utilizar o modificar este software en todo o en parte usted acepta los términos y condiciones de este contrato. El mismo esta desarrollado procurando establecer y otorgar todas las libertades de los software denominados del tipo abiertos y por lo tanto las libertades establecidas y permitidas en ellos. Para el presente contrato no es necesaria la firma para establecer y que queden firmes las condiciones, al realizar la descarga, copia, instalación, reenvió, utilización o modificación este contrato se considera en ejecución. Si usted no está de acuerdo con las condiciones de este contrato, es libre de no utilizar el software. 
+
+2. DEFINICIONES
+a. GPLIB:  Significa el software para manejo y gestión de Bibliotecas
+b. GPLIB FILO: Significa el nombre de la licencia de GPLIB, compatible y derivada de GPL GNU
+c. Software: Es un conjunto ordenado de instrucciones de maquina que ejecutados cumplen un proposito o tarea. 
+d. Descarga, uso, copia y distribución: Se refiere a la obtención del Software, las condiciones en las que se ejecuta, su reproduccion total o parcial y su disponibilidad .
+e. Modificación: Consiste en la capacidad de alterar las instrucciones originales para que cumpla con un propósito distinto al inicial. 
+f. Código: Consiste en la codificación fuente del programa, previo a la compilación a código ensamblado de máquina.  
+g. Uso publico:  Cuando forma parte de una organización o comunidad sin fines de lucro, tanto pública como privada. 
+h. Uso comercial: Cuando forma parte de una organización con fines comerciales, tanto pública como privada.  
+
+3. DERECHOS DE PROPIEDAD INTELECTUAL
+
+a. DERECHO DE AUTOR: El presente software se encuentra protegido por las leyes de Propiedad Intelectual. El titular de los derechos mediante el presente contrato autorizará todo lo establecido en la clausula 4. 
+b. VERSION 0: La versión 0 del presente software es titularidad de la Facultad de Filosofía y Letras de la Universidad de Buenos Aires. En las sucesivas descargas, copias, instalaciones, reenvíos, utilizaciones o modificaciones se deberá respetar el derecho de autor del titular y mención del nombre del software y todo lo establecido en el presente contrato. 
+c. DERECHO DE AUTOR DERIVADO: Las modificaciones contarán con el derecho de autor sobre la modificación pudiendo el autor de la modificación reclamar que se respeten los derechos de autor establecidos en el presente contrato. El autor de las modificaciones acepta y se compromete a realizar las modificaciones bajo los términos del presente contrato. El autor de las modificaciones es un autor derivado por lo tanto las condiciones que prevalecerán son las establecidas por el titular original. 
+
+4. PERMISOS Y RESTRICCIONES
+a. COPIAS: El usuario que descargue el software tendrá derecho a realizar un número ilimitado de copias del software en forma gratuita. 
+b. MODIFICACIONES: El Usuario que descargue el software tendrá derecho a realizar un número ilimitado de modificaciones del software en forma gratuita. Al realizar modificaciones acepta y se obliga a otorgar una licencia gratuita del mismo tipo que el presente contrato denominado Versión del Colaborador.
+c. ACTUALIZACIONES: El titular no se encuentra obligado a realizar actualizaciones del software, pero si las hiciera las mismas serán gratuitas y se publicarán en la página web http://gplib.org.   
+d. LIMITACIONES: El titular establece que el presente software no podrá ser incluido en otro software del tipo cerrado o privativo o la realización de restricciones de cualquier tipo para el uso de otros usuarios o del titular de la versión GPLIB FILO. Tampoco se permite el uso con fines comerciales o pago del software. 
+e. RESTRICCIONES: El titular establece que se deberá respetar el derecho de autor y las menciones correspondientes en las descargas, copias, instalaciones, reenvíos, utilizaciones o modificaciones del presente software. 
+f. NO PATENTABLE: El usuario entiende que el software no puede ser patentable ni incluido en una patente con o sin autorización del titular de la versión GPLIB FILO. 
+
+5. GARANTIA
+El software es de uso gratuito por lo tanto se extiende la licencia sin garantías de ningún tipo. La garantía será aplicable en tanto la garantía sea obligatoria por las leyes aplicables del lugar establecido en el presente contrato. Si el usuario entiende que el presente software puede generarle un perjuicio es recomendable que se abstenga de utilizarlo. El usuario asume todos los riesgos con respecto a la calidad y el desempeño del programa. Si el programa tuviere defectos, el usuario asume el costo del mantenimiento, reparación o corrección. 
+El presente software y sus modificaciones no ofrecen garantía de compatibilidad o escalabilidad de los datos con software del tipo cerrados o privativos. 
+6. RESPONSABILIDADES
+El titular de los derechos de autor o aquel que descarga, copia, instala, reenvía, utiliza o modifica el presente software según lo establecido en las clausulas del presente contrato no será responsable por cualquier daño ya sea este total o parcial, especiales, fortuitos, derivados del uso del software. 
+Tampoco se asume responsabilidad por vicios ocultos o redhibitorios en la programación del software o su uso y que generen por ello pérdida de datos, precisiones o cualquier otro defecto del funcionamiento. El usuario del software deberá arbitrar todos los medios para preservar su información realizando las medidas técnicas necesarias para tal fin. 
+7. VALIDEZ Y COMPATIBILIDAD CON OTRAS LICENCIAS
+El presente contrato será válido y aplicable para la presente versión o para las versiones subsiguientes. Usted tiene permiso de realizar obras derivadas del presente software mediante el uso de otras licencias siempre y cuando asegure la compatibilidad o la validez del uso de otras licencias y que otorguen validez en los mismos términos e interpretaciones con la presente licencia. 
+
+8. IDENTIFICACIÓN
+El presente contrato garantiza las siguientes libertades:
+1) la libertad de usar el programa, con cualquier propósito.
+2) la libertad de estudiar cómo funciona el programa y  modificarlo, adaptándolo a tus necesidades. 
+3) la libertad de distribuir copias del programa.
+4) la libertad de mejorar el programa y hacer públicas esas mejoras a los demás, de modo que toda la comunidad se beneficie.
+5) La libertad de de acceder al código fuente a fin de hacer posible estudiar y modificar software 
+Quedando prohibido CERRAR O USAR EN SISTEMAS CERRADOS .
+
+9. TABLA DE COMPATIBILIDADES
+La presente lista ofrece una descripción no taxativa de compatibilidad con otras  licencias del tipo abierto. En caso de existir incompatibilidad con alguna cláusula de las mismas se utilizará el criterio de la validez total del contrato otorgando la exclusión de la cláusula inválida o inaplicable en virtud del presente contrato.
+GNU General Public License (GNU GPL) GPL V3
+GNU General Public License (GNU GPL) v.2
+Open Software License (OSL) v.2.1.v.3.0
+Common Public License v.1.0
+Eclipse Public License v.1.0
+Cecill v.2.0
+EUPL v.1.1
+
+10. LEY APLICABLE, SOLUCION DE CONTROVERSIA, TRIBUNALES
+a. Ley Aplicable. Este contrato se regirá e interpretará de conformidad con las leyes  vigentes en la República Argentina. 
+b. Solución de controversias: El titular y el usuario procurarán, en todo momento, llegar a un acuerdo sobre la interpretación y la aplicación de este contrato y, mediante la cooperación y consultas, se esforzarán siempre por alcanzar una solución mutuamente satisfactoria de cualquier asunto que pudiese afectar su funcionamiento. 
+c. Tribunales: Para todos los efectos no resueltos por el sistema de solución de controversias los tribunales establecidos con competencia para resolver cualquier divergencia o interpretación del presente contrato serán los Tribunales competentes en la Ciudad de Buenos Aires. 
+
