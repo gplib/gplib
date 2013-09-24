@@ -1,0 +1,399 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+<div class="item_fields_wrapper">
+    {% if not is_popup and task.description and task.description != 'None' %}
+    <!-- Ratón-->
+    <div class="Mouse AdministracionPedidoLibro"></div>
+    <!-- Inicio bocata-->
+    <div class="bocata AdministracionPedidoLibro">
+      <div class='arriba'>
+        <h1>&nbsp;</h1>
+      </div>
+
+      <div class='cuerpo-exterior'>
+        <div class='cuerpo'>
+          <div class='cuerpo-interior'>{{task.description}}</div>
+        </div>
+      </div>
+      <div class='pie-exterior'>
+        <div class='pie'>
+          <div class='pie-interior'>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin bocata-->
+    {% endif %}
+
+    {% if is_popup %}
+    <ul id="fields_validation_errors" style="padding: 0.5em;"></ul>
+    {% else %}
+    <div style="clear: both;"></div>
+    {% endif %}
+
+    {% if html_tpl %}
+      {{html_tpl|safe}}
+    {% else %}
+
+    <!-- Read -->
+    <table width="100%" cellspacing="0">
+    {% for k, field, field_value, subfields, tema3 in task.read_item_fields %}
+    <tbody class="{% cycle 'odd' 'even' %}">
+    <tr>
+      <td width="4%" class="destacadoV">{% if k < 1000 %} {{field.id}} {% endif %}</td>
+      <td width="0%">
+        {% if k < 1000 %}{{field.first.indicator1|default:''}}{% endif %}
+      </td>
+      <td width="0%">
+        {% if k < 1000 %}{{field.first.indicator2|default:''}}{% endif %}
+      </td>
+        {% if subfields %}
+          <td width="20%" >{{ field.field_name }}</td>
+          <td colspan="3"></td></tr><tr>
+          {% for sf, sf_value in subfields %}
+              {% for val in sf_value %}
+              <td width="4%">&nbsp;${{sf.field_name}}</td>
+              <td width="0%" colspan="2"></td>
+              <td width="20%">{{sf.description}}</td>
+                <td width="80%" colspan=3>
+                  <input disabled id='id_{{ sf.field_name }}' name='sf_{{field.id}}_{{sf.field_name}}' value='{{val}}' style="width: 100%" />
+                </td>
+              </tr>
+              {% if not forloop.parentloop.last %}
+              <tr>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% else %}
+          {% for val in field_value %}
+                <td width="20%">{{ field.field_name }}</td>
+                <td width="4%"></td>
+                <td width="0%">
+                  <!-- <input type="text" disabled class="form-txt form-left" style="width: 84%;">-->
+                </td>
+                <td width="80%">
+                  <input disabled id='id_{{ field.id }}' name='{{field.id}}'{% if not new_item %} value='{{val}}'{% endif %} style="width: 100%" />
+                </td>
+              </tr>
+              {% if not forloop.last %}
+              <tr>
+              {% endif %}
+          {% endfor %}
+          {% endif %}
+
+          {% if not forloop.last %}
+    </tbody>
+    {% endif %}
+    {% endfor %}
+    </table>
+    <br>
+
+
+    <hr />
+   <!-- Write -->
+    <table width="100%">
+    {% for k, field, field_value, subfields, tema3 in task.write_item_fields %}
+
+      <tr id="field_row_{{field.id}}">
+      {% if k < 1000 %}
+        <td>{{field.id}}</td>
+        <td>
+          <input id='id_{{ field.id }}_indicator1'
+                 name='{{field.id}}_indicator1'
+                 class="form-txt"
+                 style="width:20px;"
+                 maxlength="1"
+                 value="{{field.first.indicator1|default:''}}"/>
+        </td>
+        <td>
+          <input id='id_{{ field.id }}_indicator2'
+                 name='{{field.id}}_indicator2'
+                 class="form-field form-txt" style="width:20px;"
+                 maxlength="1"
+                 value="{{field.first.indicator2|default:''}}"/>
+        </td>
+        {% else %}
+        <td></td>
+        <td></td>
+        <td></td>
+        {% endif %}
+
+        {% if subfields %}
+          <td>{{ field.field_name }}</td>
+
+          <td>
+            <select class="form-field dynam{% if tema3 %} tema3{% endif %}" id="sf_select_{{field.id}}">
+              <option value='None'>--Agregar Subcampo--</option>
+              {% for sf, sf_value in subfields %}
+              <option value='{{field.id}}::{{sf.field_name}}::{{sf.description}}::{{sf.repeat}}'>${{sf.field_name}} - {{sf.description}}</option>
+              {% endfor %}
+            </select>
+          </td>
+          </tr>
+
+          <!-- start subfields -->
+          <tr>
+            <td colspan="5">
+
+        <table id="subfields_{{field.id}}" class="noborder subfields" style="width: 100%;">
+            {% for sf, sf_value in subfields %}
+                {% for val in sf_value %}
+                {% if val or sf.required %}
+
+                <tr>
+                <td>${{sf.field_name}}</td>
+                <td>{{sf.description}}</td>
+                <td><input class="form-field form-txt{% if tema3 %} tema3{% endif %}{%if field.id == '245' and sf.field_name == 'a' %} autoridad{% endif %}"
+                           id='id_{{field.id}}_{{ sf.field_name }}'
+                           name='sf_{{field.id}}_{{sf.field_name}}'
+                       {% if val %}value='{{val}}'{% endif %}/>
+                </td>
+                <td><a class="remove-subfield"><img src="/media/images/but_cancelarp.png"></a></td>
+                </tr>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+
+            </table>
+            </td>
+          </tr>
+          <!-- end subfields -->
+        {% else %}
+          {% for val in field_value %}
+              <td>{{ field.field_name }}</td>
+              <!--td>
+                <input type="text" disabled class="form-txt form-left" style="width: 84%;">
+              </td-->
+              <td>
+                {% if field.type == 'image' or field.type == 'greenstone' %}
+                <input class="form-field form-txt"
+                       type="file"
+                       id='id_{{ field.id }}'
+                       name='{{field.id}}' />
+                {% else %}
+                <input class="form-field form-txt{% if tema3 %} tema3{% endif %}"
+                       id='id_{{ field.id }}'
+                       name='{{field.id}}'{% if not new_item %}
+                       value='{{val}}'{% endif %}/>
+                {% endif %}
+              </td>
+            </tr>
+            {% if not forloop.last %}
+            <tr>
+            {% endif %}
+          {% endfor %}
+          {% endif %}
+    {% endfor %}
+    </table>
+    <br>
+    {% endif %}
+
+    {% if not is_popup %}
+    <ul id="fields_validation_errors" style="padding: 0.5em; clear: both;"></ul>
+    {% endif %}
+  </div>
+
+<script type="text/javascript">
+function add_subfield(fieldinfo) {
+    if(fieldinfo.length != 4) return;
+    var fieldname = "$"+fieldinfo[1];
+    var repeat = fieldinfo[3];
+
+    var use_autoridad = false;
+    if(fieldinfo[0] == "100" && fieldinfo[1] == "a"){
+      use_autoridad = true;
+    }
+    var select = $("#sf_select_" + fieldinfo[0]);
+    var use_tema3 = select.hasClass("tema3");
+
+    var field = $('<tr>'+
+     '<td>$'+fieldinfo[1]+'</td>'+
+     '<td>'+fieldinfo[2]+'</td>'+
+     '<td>'+
+     '<input class="form-field form-txt sf_'+fieldinfo[0]+'_'+fieldinfo[1]+
+                (use_tema3 ? ' tema3' : '')+
+                (use_autoridad ? ' autoridad' : '')+'"'+
+                'id="sf_'+fieldinfo[0]+'_'+fieldinfo[1]+'"'+
+                'name="sf_'+fieldinfo[0]+'_'+fieldinfo[1]+'"'+
+                'value=""/>'+
+     '</td>'+
+     '<td><a class="remove-subfield"><img src="/media/images/but_cancelarp.png"></a></td>'+
+     '</tr>');
+
+    if (select.hasClass("tema3")) {
+        attach_autocomplete.apply(field.find("input"));
+    }
+
+    if(use_autoridad){
+        attach_autocomplete.apply(field.find("input"));
+    }
+
+    var table = $("#subfields_" + fieldinfo[0]);
+    var inserted = false;
+    table.find("tr").find("td:eq(0)").each(function(){
+      if(inserted) return;
+      if($(this).text() >= fieldname) {
+        inserted = true;
+        $(this).parent().before(field);
+      }
+    });
+    if(!inserted) {
+      table.append(field);
+    }
+
+    select.val('None');
+}
+
+/*shamelessly stolen from the jquery ui demos*/
+$.widget("custom.catcomplete", $.ui.autocomplete, {
+    _renderMenu: function( ul, items ) {
+      var self = this, currentCategory = "";
+      $.each( items, function( index, item ) {
+        if ( item.category && item.category != currentCategory ) {
+          ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+          currentCategory = item.category;
+        }
+        self._renderItem( ul, item );
+      });
+    },
+    _renderItem: function( ul, item ) {
+      return $( "<li></li>" )
+        .data( "item.autocomplete", item )
+        .append( "<a>" + item.label + (item.desc ? (" - <small><em>" + item.desc + "</em></small>") : "") + "</a>" )
+        .appendTo( ul );
+    }
+  });
+
+/*shamelessly stolen from stack overflow*/
+(function ($) {
+    var filters = $.expr[":"];
+    if (!filters.focus) {
+        filters.focus = function(elem) {
+           return elem === document.activeElement && (elem.type || elem.href);
+        };
+    }
+})(jQuery);
+
+function attach_autocomplete() {
+    var lastXhr;
+    var that = $(this);
+    if(that && !that.hasClass("autoridad")){
+      var url = "/tematres/query/";
+    }else{
+      var url = "/search/reference_complete/";
+    }
+    $(this).catcomplete({
+        source: function(request, response) {
+            lastXhr = $.getJSON(url, request, function(data, status, xhr) {
+                if (xhr === lastXhr && $(that).is(":focus")) {
+                    response(data);
+                } else {
+                    response();
+                }
+            });
+        }
+    });
+}
+
+function show_fields_validation_errors(errors) {
+  var ul = $("#fields_validation_errors");
+  ul.empty();
+  for (var i in errors) {
+    text = (errors[i][1] == 'required') ? " es requerido" :
+      (" debe ser de tipo " + errors[i][1]);
+    ul.append($("<li>").text(errors[i][0] + text));
+  }
+  ul.effect("highlight", {color: "#ff9999"}, 2000);
+}
+
+function add_presubmit_validation(form) {
+  form.find("[type=submit]").click(function() {
+    form.data("last_clicked", $(this));
+  });
+  form.submit(function(e) {
+    if (form.data("validated") == true || form.data("last_clicked").attr("name") == 'cancelar') {
+      // 'cancelar' on decisiontask means 'posponer'
+      return true;
+    }
+    var formdata = form.serialize();
+    var inputs = form.find("input, select");
+    inputs.prop("disabled", true).css("background-color", "#ddd");
+    jQuery.post("/couchflow/validate_task/{{task.get_id}}/", formdata, function(data) {
+      inputs.prop("disabled", false);
+      if (data["response"]) {
+        form.data("validated", true);
+        form.data("last_clicked").click();
+      } else {
+        inputs.css("background-color", "#fff"); /* only reset bg when fields need to be edited */
+        form.data("validated", false);
+        show_fields_validation_errors(data["errors"]);
+      }
+    }, "json");
+    $(window).data('skip_warning', false);
+    return false;
+  });
+}
+
+$(function(){
+    $(".dynam").change(function(){
+        var fieldinfo = $(this).val().split("::");
+        if(fieldinfo.length < 4) return;
+        var repeat = fieldinfo[3];
+        if(repeat != "True") {
+          $(this).find("option[value='"+$(this).val()+"']").attr("disabled", "disabled");
+        }
+        add_subfield(fieldinfo);
+    });
+    $("input.tema3").each(attach_autocomplete);
+    $("input.autoridad").each(attach_autocomplete);
+    $("a.remove-subfield").live("click", function(){
+      $(this).parent().parent().remove();
+    });
+});
+</script>

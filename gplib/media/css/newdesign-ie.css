@@ -1,0 +1,11 @@
+div#contenido {
+  position: relative;
+  top: 3px;
+}
+div#primera-columna {
+  top: 3px;
+}
+div#contenedor {
+  margin-top: -3px;
+  margin-bottom: -3px;
+}

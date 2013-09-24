@@ -1,0 +1,228 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "base.html" %}
+
+{% block title %}{{block.super}} - Estadísticas y reportes{% endblock %}
+{% block subtitle %}Estadísticas y reportes{% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+table.invtable th {
+    background-color: #4D5C01;
+}
+
+table.invtable {
+    border: 1px solid #999;
+    padding: 1px;
+    width: 100%;
+}
+
+h4 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+tr.even {
+    background-color: #d5d5d5;
+}
+</style>
+<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="/media/js/excanvas.min.js"></script><![endif]-->
+<script type="text/javascript" src="/media/js/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="/media/js/jqplot/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src="/media/js/jqplot/jqplot.categoryAxisRenderer.min.js"></script>
+<script type="text/javascript" src="/media/js/jqplot/jqplot.canvasTextRenderer.min.js"></script>
+<script type="text/javascript" src="/media/js/jqplot/jqplot.canvasAxisTickRenderer.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/media/css/jquery.jqplot.min.css" />
+<script type="text/javascript">
+$(function() {
+    var axes_settings = {
+        xaxis: {
+            renderer: $.jqplot.CategoryAxisRenderer,
+            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+            tickOptions: {
+              angle: -45,
+              fontSize: '10pt'
+            }
+        }
+    }
+
+    function make_kv_bar_graph(node, keys, values, title) {
+        series = []
+        for (var k in keys) {
+            series.push({label: keys[k]});
+        }
+        $.jqplot(node, values, {
+            seriesDefaults: {renderer:$.jqplot.BarRenderer},
+            series: series,
+            axes: axes_settings,
+            legend: {
+                show: true,
+                placement: 'outsideGrid'
+            },
+        })
+    }
+    function make_bar_graph(node, data, title) {
+        $.jqplot(node, [data], {
+            seriesDefaults: {renderer:$.jqplot.BarRenderer},
+            axes: axes_settings
+        })
+    }
+    make_kv_bar_graph('users_month_group_graph', {{users_month_group_graph_keys|safe}}, {{users_month_group_graph_values|safe}});
+    make_bar_graph('by_item_type_graph', {{by_item_type_graph|safe}});
+    {% if by_072 %}
+    make_bar_graph('by_072_graph', {{by_072_graph|safe}});
+    {% endif %}{% if by_041 %}
+    make_bar_graph('by_041_graph', {{by_041_graph|safe}});
+    {% endif %}
+    make_kv_bar_graph('circulation_graph', {{circulation_graph_keys|safe}}, {{circulation_graph_values|safe}});
+})
+</script>
+{% endblock %}
+
+{% block content %}
+
+<h4>Altas de usuarios por mes y grupo</h4>
+
+<div id="users_month_group_graph" style="width: 500px; height: 300px;"></div>
+
+<table class="invtable">
+<tr><th>Fecha</th><th>Grupos</th></tr>
+{% for month, groups in users_month_group %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{month}}</td>
+<td>
+{% for group, value in groups %}
+<div>{{group}}: {{value}}</div>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+
+<h4>Items catalogados por tipo</h4>
+
+<div id="by_item_type_graph" style="width: 500px; height: 300px;"></div>
+
+<table class="invtable">
+<tr><th>Tipo</th><th>Cantidad</th></tr>
+{% for x in by_item_type %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{x.key}}</td>
+<td>{{x.value}}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% if by_072 %}
+<h4>Items catalogados por categoría temática primaria</h4>
+
+<div id="by_072_graph" style="width: 500px; height: 300px;"></div>
+
+<table class="invtable">
+<tr><th>Categoría</th><th>Cantidad</th></tr>
+{% for x in by_072 %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{x.key}}</td>
+<td>{{x.value}}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if by_041 %}
+<h4>Items catalogados por idioma</h4>
+
+<div id="by_041_graph" style="width: 500px; height: 300px;"></div>
+
+<table class="invtable">
+<tr><th>Idioma</th><th>Cantidad</th></tr>
+{% for x in by_041 %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{x.key}}</td>
+<td>{{x.value}}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<h4>Circulación</h4>
+
+<div id="circulation_graph" style="width: 500px; height: 300px;"></div>
+
+<table class="invtable">
+<tr>
+<th>Mes</th>
+<th>Prestamos</th>
+<th>Devoluciones</th>
+</tr>
+{% for month, x in circulation %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{month}}</td>
+<td>{{x.loan}}</td>
+<td>{{x.return}}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h4>Prestamos por tipo de item</h4>
+
+<table class="invtable">
+<tr><th>Mes</th><th>Tipos</th></tr>
+{% for month, types in loans_by_type %}
+<tr class="{% cycle 'odd' 'even' %}">
+<td>{{month}}</td>
+<td>
+{% for type, value in types.items %}
+<div>{{type}}: {{value}}</div>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
+

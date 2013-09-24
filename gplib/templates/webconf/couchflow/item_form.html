@@ -1,0 +1,229 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "basepopup.html" %}
+{% block content %}
+
+{% if item %}
+<h1>Editar item "{{item.name}}"</h1>
+{% else %}
+<h1>Nuevo item </h1>
+{% endif %}
+
+<div id="item">
+
+<form id="item_form" action="{{ form_url }}" method="post"> {% csrf_token %}
+    <label for="id_name">Nombre:</label>{{ form.name }}
+    <label for="id_reference">Referencia:</label> {{ form.reference }}
+    <label for="id_reference">Prestable:</label> {{ form.loanable }}
+
+    <div id="extra_fields">
+
+<div id="fieldsForm" class="sheepitForm">
+  <!-- Form template-->
+  <div id="fieldsForm_template" class="field">
+      <a id="fieldsForm_remove_current" style="float:right">
+         <img src="/media/images/silk/cancel.png" border="0">
+      </a>
+    <label for="fieldsForm_#index#_id">ID</label>
+    <input id="fieldsForm_#index#_id" name="id_#index#" type="text" size="5" />
+
+    <label for="fieldsForm_#index#_name">Nombre</label>
+    <input id="fieldsForm_#index#_name" name="name_#index#" type="text" size="12" />
+
+    <label for="fieldsForm_#index#_default">Default</label>
+    <input id="fieldsForm_#index#_default" name="default_#index#" type="text" size="12" />
+
+    <label for="fieldsForm_#index#_type">Tipo</label>
+    <select id="fieldsForm_#index#_type" name="type_#index#">
+        <option value="int"> Entero</option>
+        <option value="float">Real</option>
+        <option value="string">Caracteres</option>
+        <option value="boolean">Bool</option>
+        <option value="image">Imagen</option>
+        <option value="date">Fecha</option>
+        <option value="greenstone">Greenstone</option>
+    </select>
+
+    <label for="fieldsForm_#index#_repeat">Repite</label>
+    <select id="fieldsForm_#index#_repeat" name="repeat_#index#">
+        <option value="false">No</option>
+        <option value="true">Si</option>
+    </select>
+
+    <div id="field_#index#_sf">
+        <div id="field_#index#_sf_template" class="subfield">
+
+            <label for="field_#index#_sf_#index_sf#_name">Nombre</label>
+            <input id="field_#index#_sf_#index_sf#_name" name="sfname_#index#_#index_sf#" type="text" size="12" />
+
+            <label for="field_#index#_sf_#index_sf#_desc">Descripcion</label>
+            <input id="field_#index#_sf_#index_sf#_desc" name="sfdesc_#index#_#index_sf#" type="text" size="12" />
+
+            <!--
+            <label for="field_#index#_sf_#index_sf#_default">Default</label>
+            <input id="field_#index#_sf_#index_sf#_default" name="sfdefault_#index#_#index_sf#" type="text" size="12" />
+            -->
+
+            <label for="field_#index#_sf_#index_sf#_type">Tipo</label>
+            <select id="field_#index#_sf_#index_sf#_type" name="sftype_#index#_#index_sf#">
+                <option value="int"> Entero</option>
+                <option value="float">Real</option>
+                <option value="string">Caracteres</option>
+                <option value="boolean">Bool</option>
+            </select>
+
+            <label for="field_#index#_sf_#index_sf#_repeat">Repite</label>
+            <select id="field_#index#_sf_#index_sf#_repeat" name="sfrepeat_#index#_#index_sf#">
+                <option value="false">No</option>
+                <option value="true">Si</option>
+            </select>
+
+            <a id="field_#index#_sf_remove_current"><img src="/media/images/silk/cancel.png" border="0"></a>
+        </div>
+        <!-- /Nested form template-->
+
+        <!-- No forms template -->
+        <div id="field_#index#_sf_noforms_template"></div>
+        <!-- /No forms template-->
+
+        <!-- Controls -->
+        <div id="field_#index#_sf_controls" class="controls">
+            <div id="field_#index#_sf_add"><a>
+                <span><img src="/media/images/silk/add.png" border="0">
+                Agregar Subcampo</span>
+            </a></div>
+        </div>
+        <!-- /Controls -->
+    </div>
+    <!-- /Embeded sheepIt Form -->
+  </div>
+  <!-- /Form template-->
+
+  <!-- Controls -->
+  <div id="fieldsForm_controls">
+      <div id="fieldsForm_add" style="float:right"><a><span>
+            <img src="/media/images/silk/add.png" border="0">
+                  Agregar Campo</span></a></div>
+  </div>
+  <!-- /Controls -->
+
+  <!-- No forms template -->
+  <div id="fieldsForm_noforms_template"></div>
+  <!-- /No forms template-->
+
+</div>
+</div>
+
+ <input type="submit" value="Guardar" />
+</form>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+
+  $('#item_form').ajaxForm({
+      dataType: 'json',
+      success: function(data){
+        if(data["response"]==true){
+          $('#id_select_item').append("<option value='" + data['item_type'] +
+                      "' selected='selected'> " + data['name'] + "</option>");
+          selectItem();
+          $.closePopupLayer();
+        }
+      }
+  });
+
+  fieldsForm = $('#fieldsForm').sheepIt({
+      separator: '',
+      allowRemoveLast: false,
+      allowRemoveCurrent: true,
+      allowRemoveAll: false,
+      allowAdd: true,
+      allowAddN: false,
+      maxFormsCount: 0,
+      minFormsCount: 1,
+      iniFormsCount: 1,
+      nestedForms: [
+          {
+              id: 'field_#index#_sf',
+              options: {
+                  separator: '',
+                  indexFormat: '#index_sf#',
+                  minFormsCount: 0,
+                  iniFormsCount: 0
+              }
+          }
+      ],
+  });
+
+  var fieldsData = [];
+   {% if item.fields_properties %}
+    {% for key, fields in item.show_fields_properties %}
+    fieldsData.push({'id': "{{fields.id}}", 'type': "{{fields.type}}", 'name': "{{fields.field_name}}", 
+            'default': "{{fields.default_value}}", 'repeat': "{{fields.repeat}}"});
+    {% endfor %}
+   {% endif %}
+  fieldsForm.inject(fieldsData);
+
+   {% if item.fields_properties %}
+    {% for key, fields in item.show_fields_properties %}
+      sfData = [];
+      ff = fieldsForm.getForm({{key}});
+      {% for sf in fields.first.subfields.values %}
+         sfData.push({'type': "{{sf.type}}", 'name': "{{sf.field_name}}", 
+              'desc': "{{sf.description}}", 'repeat': "{{sf.repeat}}"});
+      {% endfor %}
+      ff.data('nestedForms')[0].inject(sfData);
+    {% endfor %}
+   {% endif %}
+});
+</script>
+
+{% endblock %}

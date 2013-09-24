@@ -1,0 +1,320 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "webconf/couchflow/base.html" %}
+
+{% block extra_head %}
+<script type="text/javascript" src="/media/js/joint.all-ngw-min.js"></script>
+<script type="text/javascript" src="/media/js/joint.dia.ngw.js"></script>
+
+{% if workflow %}
+<script type="text/javascript">
+  var ngw = Joint.dia.ngw;
+var timeout_id = null;
+function showError(error){
+    $('#error').text(error).show();
+    if(timeout_id!=null) clearTimeout(timeout_id);
+      timeout_id = setTimeout(function(){$('#error').hide()}, 8000);
+}
+
+function getWFID(){
+    var parts = window.location.pathname.split('/');
+    var i = 1;
+    if(parts[parts.length-1] == "") i = 2;
+
+    return parts[parts.length-i];
+}
+
+$('body').ready(function(){
+   Joint.prototype.registerCallback("removedItem", function(item){
+       node = item.data['id'];
+       if(item.data["node_type"]=="start"){
+         showError("No se puede eliminar el nodo inicial");
+         return false;
+       }
+       $.ajax({
+          url: "/webconf/couchflow/delete_task/"+node+"/"
+       });
+       return true;
+       });
+
+   Joint.prototype.registerCallback("diaMouseUp",  function(item){
+      console.log(item);
+       var node = item["data"]["id"];
+       var x = item.wrapper["attrs"]["x"];
+       var y = item.wrapper["attrs"]["y"];
+       $.ajax({
+           url: "/webconf/couchflow/task_pos/"+node+"/"+x+"/"+y+"/"
+           });
+       });
+
+    //Joint.prototype.registerCallback("removedJoints",  function(item){console.log(item)});
+
+    Joint.prototype.registerCallback("justConnected",  function(item){
+        var connector = item[0]._opt.attrs.id;
+        var node = item[1].data['id'];
+        $.ajax({
+            dataType: "json",
+            url: "/webconf/couchflow/connect_nodes/"+connector+"/"+node+"/next/",
+            success: function(data){
+                //console.log(data);
+                if(data["response"]==false)
+                  showError(data["status"]);
+            }
+        });
+    });
+    Joint.prototype.registerCallback("disconnected",  function(item){
+        var node = item[0].data['id'];
+        var connector = item[1]._opt.attrs.id;
+
+        $.ajax({
+            dataType: "json",
+            url: "/webconf/couchflow/disconnect/"+connector+"/"+node+"/",
+            success: function(data){
+                //console.log(data);
+                if(data["response"]==false)
+                  showError(data["status"]);
+            }
+        });
+    });
+    Joint.prototype.registerCallback("toolboxCreate",  function(obj, ev){
+            var task_id = obj["data"]["id"];
+            addConnectorForm(task_id);
+        }
+        );
+
+    fsa = Joint.dia.fsa;
+    Joint.paper("world", 820, 680);
+
+   {{ nodes|safe }}
+   {{ register|safe }}
+   fsa.arrow.label = null;
+
+   $("#id_select_item").change(function(){
+        var val = $(this).val();
+        if(val == '--CREATE--'){
+            addItem();
+        }else if(val != '----'){
+            selectItem();
+        }
+
+    });
+
+});
+
+function addConnectorForm(task_id){
+    if(task_id){
+        var url = "/webconf/couchflow/edit_form_task/"+task_id+"/";
+    }else{
+        var url = "/webconf/couchflow/create_form_task/"+getWFID()+"/";
+    }
+    $.openPopupLayer({
+       name: "createTask",
+       width: 700,
+       url: url,
+       cache: false,
+       success: function() {
+       }
+    });
+}
+
+function addItem(){
+    var url = "/webconf/couchflow/new_item/"
+    $.openPopupLayer({
+       name: "createItem",
+       width: 800,
+       url: url,
+       cache: false,
+       success: function() {
+       }
+    });
+}
+
+function editItem(){
+    var url = "/webconf/couchflow/wf_item/"+getWFID()+"/";
+    $.openPopupLayer({
+       name: "createItem",
+       width: 800,
+       url: url,
+       cache: false,
+       success: function() {
+       }
+    });
+}
+
+function selectItem(){
+    var url = "/webconf/couchflow/select_item/"+getWFID()+"/"+$('#id_select_item').val()+"/";
+    $.ajax({
+       name: "createItem",
+       dataType: "json",
+       width: 600,
+       url: url,
+       cache: false,
+       success: function(data) {
+            if(data["response"]==true){
+              $('#selector_items').hide();
+              $('#edit_item').show();
+            }
+       }
+    });
+}
+
+function addNode(id, label, description, type){
+    stroke = 'black';
+    fill = 'white';
+    if(type == 'start'){
+        stroke = 'red';
+    }else if(type == 'end'){
+        stroke = 'blue';
+    }
+    node = ngw.Node.create({
+            id: id,
+            description: description,
+            rect: { x: 90, y: 135, width: 200, height: 80 },
+            title: label,
+            data: {type: "node", id: id, node_type: type},
+            attrs: {
+                stroke: stroke,
+                fill: fill
+            }
+    });
+
+    all.push(node);
+}
+
+function addJoint(jointId, jointType, from, to){
+    var nodeFrom = null;
+    var nodesTo = [];
+    for(i in all){
+        if(all[i].data['id'] == from){
+            nodeFrom = all[i];
+        }
+        if(to != undefined){
+            for(n in to){
+                if(all[i].data['id'] == to[n]){
+                  nodesTo.push(all[i]);
+                }
+            }
+        }
+    }
+
+    if(nodeFrom!=null){
+        var narrow = jQuery.extend(true, {}, arrow);
+        narrow["attrs"]["id"] = jointId;
+        narrow["attrs"]["type"] = "connector";
+
+        if(to != undefined && nodesTo){
+            for(i in nodesTo){
+                nodeFrom.joint(nodesTo[i], narrow).registerForever(all);
+            }
+            if(nodesTo.length<2){
+                var x = nodeFrom.wrapper["attrs"]["x"]+60;
+                var y = nodeFrom.wrapper["attrs"]["y"]-10;
+                nodeFrom.joint({x:x, y:y}, narrow).registerForever(all);
+            }
+        }else{
+            var counter = 1;
+            if(jointType == 'ExclusiveChoice' ||
+                jointType == 'ParallelSplit' ||
+                jointType == 'UntilConector' ){
+                counter +=1;
+            }
+            while(counter--){
+                var x = nodeFrom.wrapper["attrs"]["x"]+60+counter*2;
+                var y = nodeFrom.wrapper["attrs"]["y"]-10+counter*40;
+                nodeFrom.joint({x:x, y:y}, narrow).registerForever(all);
+            }
+        }
+    }
+}
+</script>
+{% endif %}
+{% endblock %}
+
+{% block title %}{{block.super}} - {{form_title}}{% endblock%}
+{% block subtitle %}{{form_title}}{% endblock%}
+{% block content %}
+
+<div style="margin: 0 auto; width: 330px">
+<form action="{{ form_url }}" method="post"> {% csrf_token %}
+      <label>Nombre: </label>{{ form.name }}
+    {% if form.conectors %}
+        <div class="fieldWrapper">
+          <select id="id_conectors" name="conectors">
+            {% for conector in form.conectors %}
+              <option value="{{conector}}">{{conector}}</option>
+            {% endfor %}
+          </select>
+        </div>
+    {% endif %}
+ <input type="submit" value="Guardar" />
+</form>
+</div>
+
+{% if workflow %}
+<div id="error"></div>
+<div id="toolbar"><a href="javascript:addConnectorForm()">Agregar Tarea</a><a id="edit_item" {% if not workflow.item_type %} style="display:none" {% endif %}href="javascript:editItem()">Editar Item</a>
+
+{% if not workflow.item_type %}
+<span id="selector_items">
+    <strong> Items </strong>
+    <select id="id_select_item" name="select_item">
+        <option value="----" SELECTED>           </option>
+        <option value="--CREATE--">-- Crear --</option>
+      {% for item_type, item_name, selected in workflow.get_items %}
+        <option value="{{item_type}}">{{item_name}}</option>
+      {% endfor %}
+    </select>
+</span>
+{% endif %}
+
+</div>
+<div id="world"></div>
+
+{% endif %}
+{% endblock %}

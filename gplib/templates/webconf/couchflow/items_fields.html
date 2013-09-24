@@ -1,0 +1,107 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+<br />
+<p><a target="htmleditor" href="/webconf/couchflow/edit_task_html/{{task.get_id}}/" onclick="$('#htmleditor').show()">Editar html de task</a></p>
+<iframe style="display: none; border: none; width: 100%; height: 400px;" name="htmleditor" id="htmleditor"></iframe>
+<br />
+<strong> Campos del {{item.name}}:</strong>
+
+<div id="wfitem_fields">
+<table class="invtable" width="100%" border="0" bordercolor="#000000">
+    <tr>
+      <th height="10" align="center" valign="middle" bgcolor="#85B200">Nombre del campo</th>
+      <th height="10" align="center" valign="middle" bgcolor="#85B200">No mostrar</th>
+      <th height="10" align="center" valign="middle" bgcolor="#85B200">Mostrar</th>
+      <th height="10" align="center" valign="middle" bgcolor="#85B200">Modificar</th>
+      <th height="10" align="center" valign="middle" bgcolor="#85B200">Requerido</th>
+      <th height="10" align="center" valign="middle" bgcolor="#85B200">Tema3</th>
+
+    {% if task %}
+      {% for key, field_name, mode, required, tema3 in task.get_field_modes%}
+      <tr>
+        <td> {{key}} - {{ field_name }} </td>
+        <td align="center" valign="middle"> <input type="radio" name="{{key}}" value="none" {% if mode == 'none' %}checked{% endif %} ></td>
+        <td align="center" valign="middle"> <input type="radio" name="{{key}}" value="read"   {% if mode == 'read' %}checked{% endif %} ></td>
+        <td align="center" valign="middle"> <input type="radio" name="{{key}}" value="write" {% if mode == 'write' %}checked{% endif %}></td>
+        <td align="center" valign="middle">
+          <select multiple name="required" style="width: 150px;" class="multiselect">
+            {% for subfield, subfield_name, subrequired in required %}
+              <option {% if subrequired %}selected="selected"{% endif %} value="{{subfield}}">{{subfield}} - {{subfield_name}}</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td align="center" valign="middle"> <input type="checkbox" name="tema3" value="{{key}}" {% if tema3 %}checked{% endif %}></td>
+      </tr>
+      {% endfor %}
+
+    {% else %}
+      {% for key, fields in item.fields_properties_items_sorted %}
+      <tr class="{% cycle 'odd' 'even' %}">
+        <td> {{key}} - {{fields.field_name}} </td>
+        <td align="center" valign="middle"> <input type="radio" id="id_{{key}}" name="{{key}}" value="none" checked ></td>
+        <td align="center" valign="middle"> <input type="radio" id="id_{{key}}" name="{{key}}" value="read"></td>
+        <td align="center" valign="middle"> <input type="radio" id="id_{{key}}" name="{{key}}" value="write"></td>
+        <td align="center" valign="middle"> <input type="checkbox" /></td>
+        <td align="center" valign="middle"> <input type="checkbox" /></td>
+      </tr>
+      {% endfor %}
+
+      {% endif %}
+  </table>
+</div>
+
+<script type="text/javascript">
+$(function() {
+  $("select.multiselect").multiselect({
+    minWidth: 150
+  });
+});
+</script>
+
+<br />

@@ -1,0 +1,13 @@
+.block {
+    border: outset 2px black;
+    padding: 2px;
+    margin: 2px;
+}
+
+.block.read {
+    background-color: #fdd;
+}
+
+.block.write {
+    background-color: #dfd;
+}

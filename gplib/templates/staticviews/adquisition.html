@@ -1,0 +1,152 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "base.html" %}
+
+{% block title %}{{block.super}} - {{module_name}}{% endblock %}
+{% block subtitle %}{{module_name}}{% endblock %}
+{% block content %}
+    <table cellspacing="0" cellpadding="5" width="100%"><tr>
+          <!--  Tareas Pendientes -->
+          {% if 'pendientes' in modules %}
+            <td valign="top" width="50%">
+            <form action="/couchflow/bulk_tasks/" method="post"> {% csrf_token %}
+              <div id="index_pending_tasks" class="index_module">
+                <h1>Mis Tareas Pendientes</h1>
+            <table width="100%" cellspacing="0" class="tasklist">
+              {% if tasks %}
+              {% for task in tasks %}
+              {% if not task.task_type %}
+                  <tr>
+                      <td colspan="2" class="noborder">&nbsp;Tarea n&ordm; {{ task }}</td>
+                  </tr>
+              {% else %}
+        <tr>
+          <td>
+              <a href="/couchflow/execute_task/{{task.id}}/">{{ task.name }} {% if task.item_name %}"{{task.item_name}}"{% endif %}</a>
+          </td>
+          <td>
+              {% if task.is_bulkable %}
+              <input type="checkbox"
+                 id="id_task_{{task.id}}" name="task_{{task.id}}" value="selected">
+              {% endif %}
+          </td>
+        </tr>
+
+                {% endif %}
+              {% endfor %}
+            </table>
+            <table width="100%" cellspacing="0" class="noborder">
+        <tr class="actions">
+          <td colspan="2" height="30" align="right" valign="middle">
+            <input type="submit"  id='id_aceptar' name='aceptar' value="Aceptar" />
+            <input type="submit"  id='id_rechazar' name='rechazar' value="Rechazar" />
+          </td>
+        </tr>
+              {% else %}
+            </table>
+            <table width="100%" cellspacing="0">
+              {% endif %}
+
+              {% if catalog.libro > 0 %}
+              <tr>
+                      <td align="left" valign="top" bgcolor="#FFFFFF">&nbsp; <a href="/couchflow/exec/procesos_tecnicos/">{{ catalog.libro }} libros a catalogar</a></td>
+                  </tr>
+              {% endif %}
+              {% if catalog.revista > 0 %}
+                  <tr>
+                      <td align="left" valign="top" bgcolor="#E9E9E9">&nbsp; <a href="/couchflow/exec/hemeroteca/">{{catalog.revista}} revistas a catalogar</a></td>
+                  </tr>
+              {% endif %}
+             </table>
+             </form>
+             </div>
+             </td>
+             {% endif %}
+             <!--  /Tareas Pendientes -->
+
+            {% if 'estado' in modules %}
+            <!-- Estado Tareas -->
+              <td valign="top" width="50%">
+                <div id="index_status" class="index_module {% if status_tasks %}with_status_tasks{% else %}without_status_tasks{% endif %}">
+                  <h1>Estado de mis pedidos</h1>
+                <table width="100%" cellspacing="0" class="reqlist">
+            {% if status_tasks %}
+              {% for task in status_tasks %}
+                {% if not task.task_type %}
+                <tr>
+                  <td>&nbsp;Pedido n&ordm; {{ task }}
+                {% else %}
+                  -- {{ task.name }}</td></tr>
+                {% endif %}
+                {% endfor %}
+                <tr><td class="noborder"></td></tr>
+            {% endif %}
+            {% endif %}
+                </table>
+              </div>
+              </td>
+            <!-- /Estado Tareas -->
+            </tr>
+        {% if can_authorize %}
+          <tr>
+            <td colspan="2">
+              <div id="index_authorize" class="index_module">
+                <h1>Solicitud de compra ({{items_to_authorize}} items)</h1>
+                <form action="/sviews/authorize/clear/" method="post"> {% csrf_token %}
+                  <button type="button" onclick="location='/sviews/authorize/csv/'; return false">Generar solicitud de compra</button>
+                  <button type="submit">Vaciar solicitud de compra</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% endif %}
+
+        </table>
+        <p>&nbsp;</p>
+{% endblock %}

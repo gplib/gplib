@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{% block title %}GPLib{% endblock %}</title>
+
+<link type="text/css" href="/media/css/smoothness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
+<link href="/media/css/newdesign.css" rel="stylesheet" type="text/css" />
+<link href="/media/css/inv.css" rel="stylesheet" type="text/css" />
+<link href="/media/css/form-style.css" rel="stylesheet" type="text/css" />
+<link href="/media/css/form-structure.css" rel="stylesheet" type="text/css"/>
+<link href="/media/css/datatables.css" rel="stylesheet" type="text/css" />
+<link href="/media/css/jquery.multiselect.css" rel="stylesheet" type="text/css" />
+
+<!--[if lt IE 7]>
+<link rel='stylesheet' type='text/css' href='/media/css/newdesign-ie.css' />
+<script src="/ie7/ie7-standard-p.js" type="text/javascript"></script>
+<![endif]-->
+
+<script type="text/javascript" src="/media/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/media/js/jquery-ui-1.8.20.custom.min.js"></script>
+<script type="text/javascript" src="/media/js/jquery.ui.datepicker-es.js">
+  $.datepicker.setDefaults($.datepicker.regional['es']);
+</script>
+<script type="text/javascript" src="/media/js/fg.menu.js"></script>
+<script type="text/javascript" src="/media/js/jquery.jmpopups.js"></script>
+<script type="text/javascript" src="/media/js/jquery.form.js"></script>
+<script type="text/javascript" src="/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/media/js/tables.js"></script>
+<script type="text/javascript" src="/media/js/jquery.sheepItPlugin-1.0.0.js"></script>
+<script type="text/javascript" src="/media/js/jquery.multiselect.min.js"></script>
+
+{% block extra_head %}
+{% endblock %}
+
+    <!-- styles for this example page only -->
+    <style type="text/css">
+    .hidden { position:absolute; top:0; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+    </style>
+
+<link type="text/css" href="/media/css/fg.menu.css" media="screen" rel="stylesheet" />
+
+    <script type="text/javascript">
+    $(function(){
+       {% include 'menujs.html' %}
+       $('#adminlink').fgmenu({content:$('#admin').html(), flyOut: true});
+
+       $('#main_search_form').submit(function(e) {
+              var w = window.open('about:blank','search_popup','toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=1000,height=600');
+              this.target = 'search_popup';
+            });
+
+    });
+    </script>
+</head>
+<body id="index" {% block body_attrs %}{%endblock%}>
+
+<div id="encabezamiento">
+  <div id="CabeIzquierdaDiv">
+    {% if user.username %}
+    <span class="cajaBienvenido">Bienvenido <br />
+    <a href="/circulation/user/me" class="nombre">{{user.username}}</a>
+    <a href="/accounts/logout/?next=/" class="salir">Salir</a>
+    </span>
+    {% else %}
+    <span class="loggedoutpadding"></span>
+    {% endif %}
+    <a href="/" class="linkGPLib"></a>
+  </div>
+
+  <form method="POST" action="/search/" class="cajaBuscador" {% if not user.get_id %}style="display:none"{% endif %}>
+    <label for="query">buscador</label>
+    <input type="text" name="query" value="{{query}}" class="login"/>
+    <input type="image" src="/media/images/lupa.png" value="submit" />
+    <p style="text-align: right"><a target="blank" href="/search/newsearch" style="color: white; font-size: smaller">Búsqueda avanzada</a></p>
+  </form>
+
+</div>
+  <!-- MENU -->
+  <div id="submenu">
+            <div id="admin" class="hidden">
+                {% if user.is_superuser %}
+                <ul>
+                    <li><a href="#">Usuarios</a>
+                      <ul>
+                        <li><a href="/webconf/couchauth/show_users/">Usuarios</a></li>
+                        <li><a href="/webconf/couchauth/show_groups/">Grupos</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="/search/admin/">Buscador</a></li>
+                    <li><a href="/tematres/admin/">Tema Tres</a></li>
+                    <li><a href="/webconf/greenstone/">Greenstone</a></li>
+                    <li><a href="/couchflow/stats">Estadísticas y reportes</a></li>
+                    <li><a href="/webconf/couchflow/menueditor/">Editor de Menu</a></li>
+                    <li><a href="/webconf/couchflow/">Workflows</a>
+                      <ul>
+                        <li><a href="/webconf/couchflow/new_workflow/">Crear</a></li>
+                        <li><a href="/webconf/couchflow/">Ver</a></li>
+                      </ul>
+                    </li>
+                </ul>
+                {% else %}
+                <ul>
+                    <li><a href="/#">Editar Perfil</a></li>
+                </ul>
+                {% endif %}
+            </div>
+
+            {% include 'menudivs.html' %}
+  </div>
+  <!-- /MENU -->
+<div id="contenedor">
+
+  <div id="subcontenedor">
+  <!--Inicio Menu -->
+  {% if user.username %}
+  <div id="menu">
+    <div id="links">
+        <ul>
+      {% include 'menubar.html' %}
+      {% if user.is_superuser %}
+          <li>
+            <a id="adminlink" href="#admin">Administraci&oacute;n</a>
+          </li>
+      {% endif %}
+        </ul>
+    </div>
+  </div>
+  {% endif %}
+
+<div id="contenido">
+  {% if user.username %}
+  <h2 class="MigaPan"><span class="flecha"></span> {% block subtitle %}{% endblock %}</h2>
+  {% endif %}
+  {% block content %}
+  {% endblock %}
+</div>
+
+</div> <!--subcontenedor-->
+</div> <!--contenedor-->
+
+{% load git_version %}
+<div id="pie">
+  <div>
+    <a href="#">Condiciones de uso</a> -
+    <span>GPLib version {% git_version %}</span>
+  </div>
+</div>
+
+</body>
+</html>

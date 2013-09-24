@@ -1,0 +1,139 @@
+# Django settings for gplib project.
+import os
+import ldap
+
+
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    # ('Your Name', 'your_email@domain.com'),
+)
+
+MANAGERS = ADMINS
+
+OLD_COUCH = False
+COUCH_HOST = 'http://127.0.0.1:5984/'
+
+COUCHDB_DATABASES = (
+  ('gplib.apps.couchauth', COUCH_HOST + 'gplib_dev'),
+  ('gplib.apps.couchflow', COUCH_HOST + 'gplib_dev'),
+  ('gplib.apps.couchsearch', COUCH_HOST + 'gplib_dev'),
+  ('gplib.apps.circulation', COUCH_HOST + 'gplib_dev'),
+  ('gplib.apps.couchsessions', COUCH_HOST + 'gplib_sessionsdb'),
+  ('config', COUCH_HOST + 'gplib_config'),
+)
+
+SESSION_ENGINE = "gplib.apps.couchsessions.couchdb"
+# DATABASE_ROUTERS es el modulo para acceder a diferentes bases de datos
+# DATABASE_ROUTERS = ['gplib.apps.externaldbs.db_router.ExternalDbsRouter', ]
+
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
+
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'es-AR'
+
+# If you set this to False, Django will make some optimizations so as not
+# to load the internationalization machinery.
+USE_I18N = True
+
+# If you set this to False, Django will not format dates, numbers and
+# calendars according to the current locale
+USE_L10N = True
+
+
+# Configuracion para conectarse a un LDAP externo para autenticar usuarios
+# LDAP_SEARCH_FILTER  es la variable a cambiar para buscar el nombre de usuario
+#LDAP_DEBUG = True
+#LDAP_SERVER_URI = 'ldap://localhost'
+#LDAP_SEARCHDN = 'ou=people,dc=cccp,dc=elvex,dc=org,dc=ar'
+#LDAP_SCOPE = ldap.SCOPE_SUBTREE
+#LDAP_SEARCH_FILTER =  'uid=%s'
+#LDAP_UPDATE_FIELDS = True
+
+
+# Configuracion para buscar los datos en una Base de datos externa
+#DATABASE_AUTH_NAME = "login"
+#DATABASE_AUTH_QUERY_TABLE = 'users'
+#DATABASE_AUTH_QUERY_USER = 'name'
+#DATABASE_AUTH_QUERY_PASSWORD = 'pass'
+
+
+#  Modulos para acceder  a los usuarios de Bases de datos externas y/o
+# bases de datos LDAP
+AUTHENTICATION_BACKENDS = (
+    'gplib.apps.couchauth.backend.CouchBackend',
+    #'gplib.apps.extauth.ldapauth.LDAPBackend',
+    #'gplib.apps.extauth.extradbauth.DbBackend',
+        )
+
+login_redirect_url = "/"
+
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media') + "/"
+MEDIA_URL = '/media/'
+
+
+ADMIN_MEDIA_PREFIX = '/admin_media/'
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'lwva0!!om+e2o6l#lspdl[adwv4!uxj9sstc7'
+
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+#     'django.template.loaders.eggs.Loader',
+)
+
+MIDDLEWARE_CLASSES = (
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+)
+
+INTERNAL_IPS = ('127.0.0.1',)
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)
+
+DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False}
+
+ROOT_URLCONF = 'gplib.urls'
+
+# The first entry in TEMPLATE_DIRS will be used for dynamic templates
+# like the menu generator output
+TEMPLATE_DIRS = (
+        os.path.join(PROJECT_PATH, 'dyntemplates'),
+        os.path.join(PROJECT_PATH, 'templates'),
+)
+
+INSTALLED_APPS = (
+    'django_extensions',
+    'couchdbkit.ext.django',
+    # gplib apps
+    'gplib.apps.portal',
+    'gplib.apps.webconf',
+    'gplib.apps.couchauth',
+    'gplib.apps.couchflow',
+    'gplib.apps.couchsessions',
+    'gplib.apps.search',
+    'gplib.apps.circulation',
+    'gplib.apps.tematres',
+    #'gplib.apps.externaldbs',
+    # debug
+    #'debug_toolbar',
+)

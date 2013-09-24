@@ -1,0 +1,9 @@
+*.pyc
+*.swp
+eggs
+bin
+develop-eggs
+parts
+.installed.cfg
+gplib/gplib.db
+gplib/settings.py

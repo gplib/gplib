@@ -1,0 +1,373 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "base.html" %}
+
+{% block title %}{{block.super}} - Buscador{% endblock %}
+{% block subtitle %}Buscador{% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+#contenido label {
+  display: block;
+  width: 500px;
+  padding-right: 120px;
+  clear: both;
+}
+
+#contenido label select, #contenido label button {
+  float: right;
+}
+
+.advanced_search {
+  display: none;
+}
+
+#fieldlist {
+  list-style: none;
+  margin-left: 75px;
+}
+
+#fieldlist label {
+  width: 450px !important;
+}
+
+#fieldlist li {
+  width: 450px;
+  clear: both;
+}
+
+#fieldlist li .floatright {
+  float: right;
+  margin-bottom: 3px;
+}
+
+#fieldlist li .floatright input {
+  color: #96BD0C;
+  padding-left: 5px;
+  border: 1px solid #85B200;
+  width: 235px;
+}
+
+#fieldlist li .floatright select {
+  display: inline;
+  width: 60px;
+}
+
+#fieldlist li .floatright .whitespace {
+  display: inline-block;
+  width: 75px;
+}
+
+#sortlabel {
+  clear: both;
+  display: block;
+  width: 635px;
+}
+
+#sortlabel select, #sortlabel button {
+  float: right;
+}
+
+#ascdesc {
+  width: 100px;
+}
+
+.ui-multiselect-menu label {
+  width: auto;
+}
+
+.ui-multiselect-menu.novertscroll .ui-multiselect-checkboxes {
+  overflow-y: auto;
+}
+
+.datefield {
+  width: 100px;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+  <div class="NuevaBusqueda wrapper">
+    <div class="Mouse NuevaBusqueda"></div>
+    <!-- Inicio bocata-->
+    <div class="bocata NuevaBusqueda">
+      <div class='arriba'>
+        <h1>&nbsp;</h1>
+      </div>
+
+      <div class='cuerpo-exterior'>
+        <div class='cuerpo'>
+          <div class='cuerpo-interior'>
+            Desde el buscador avanzado podrá filtrar su búsqueda
+          </div>
+        </div>
+      </div>
+      <div class='pie-exterior'>
+        <div class='pie'>
+          <div class='pie-interior'>
+          </div>
+        </div>
+      </div>
+    </div>
+  <form method="POST" action="">
+    <label>Buscar por campos de búsqueda: <select id="fields_select" name="fields_select" multiple="multiple" style="width:220px">
+      {% for field_id, field_name, item_type, field_type in fields_select_options %}
+        {% if not selected_type or selected_type == item_type|lower or field_id == '_ft' %}
+        <option value="{{field_id}}" class="item_type_{{item_type}} field_type_{{field_type}}"{% if field_id in fields_select %} selected="selected"{%endif%}>{% if field_id != '_ft' %}({{field_id}}) {% endif %}{{field_name}}</option>
+        {% endif %}
+      {% endfor %}
+    </select></label>
+
+    <select style="display: none" id="hidden_options" multiple="multiple">
+      {% if selected_type %}
+        {% for field_id, field_name, item_type, field_type in fields_select_options %}
+          {% if selected_type != item_type|lower and field_id != '_ft' %}
+          <option value="{{field_id}}" class="item_type_{{item_type}} field_type_{{field_type}}"{% if field_id in fields_select %} selected="selected"{%endif%}>({{field_id}}) {{field_name}}</option>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </select>
+
+    <ul id="fieldlist"{%if not selected_fields %} style="display: none;"{%endif%}>
+    {# field_data = (field_id, field_name, item_type, field_type) // django's tuple expansion is poor #}
+    {% for field_data, value, operator in selected_fields %}
+      {% if not forloop.first %}
+      <select name="operator_{{field_data.0}}">
+        <option value="AND">AND</option>
+        <option value="OR"{% if operator == 'OR' %} selected="selected"{% endif %}>OR</option>
+        <option value="NOT"{% if operator == 'NOT' %} selected="selected"{% endif %}>NOT</option>
+      </select></div></li>
+      {% endif %}
+      <li id="li_{{field_data.0}}">
+      {% if field_data.0 != '_ft' %}({{field_data.0}}) {% endif %}{{field_data.1}} <div class="floatright">
+      {% if field_data.3 == 'date'%}
+      <input type="text" name="{{field_data.0}}_from" value="{{value.0}}" class="datefield" /> -
+      <input type="text" name="{{field_data.0}}_to" value="{{value.1}}" class="datefield" />
+      {% else %}
+      <input type="text" name="{{field_data.0}}" value="{{value}}" />
+      {% endif %}
+      <input type="hidden" name="order_{{field_data.0}}" class="orderinput" value="{{forloop.counter0}}">
+      {% if forloop.last %}<span class="whitespace">&nbsp;</span></div></li>{% endif %}
+    {% endfor %}
+    </ul>
+
+    <label>Buscar por tipo de documentos: <select id="item_type" name="item_type">
+      <option value="">---</option>
+      {% for item_type in item_types %}
+        <option value="{{item_type}}"{% if selected_type == item_type|lower %} selected="selected"{% endif %}>{{item_type}}</option>
+      {% endfor %}
+    </select></label>
+
+    <div id="sortlabel">Ordenar por campo:
+    <select id="ascdesc" name="ascdesc">
+      <option value="asc" {% if postdata.ascdesc == 'asc' %} selected="selected"{% endif %}> Ascendente</option>
+      <option value="desc" {% if postdata.ascdesc == 'desc' %} selected="selected"{% endif %}> Descendente</option>
+    </select>
+    <select id="sort" name="sort">
+      <option value="">---</option>
+      {% for field_id, field_name, item_type in fields_select_options %}
+      <option value="{{field_id}}"{% if postdata.sort == field_id %} selected="selected"{% endif %}>({{field_id}}) {{field_name}}</option>
+      {% endfor %}
+    </select>
+    </div>
+
+    <!--
+    <label class="advanced_search">Buscar por obras de consulta:
+    <select id="obras_consulta">
+    </select></label>
+
+    <div class="advanced_search">Buscar por tipo de soporte:
+    <label><input type="radio" name="tipo_soporte" value="impreso" /> Impreso</label>
+    <label><input type="radio" name="tipo_soporte" value="electronico" /> Electrónico</label>
+    </div>
+
+    <label class="advanced_search">Buscar por bibliotecas: <select id="libraries">
+    </select></label>
+    -->
+
+    <button type="submit" class="green">Buscar</button>
+
+    <!--
+    <div><a href="#" id="toggle_advanced">Busqueda avanzada &raquo;</a></div>
+    -->
+
+    <input type="hidden" name="raw_query" id="raw_query" value="{{raw_query}}" />
+  </form>
+  </div>
+</div>
+
+<div id='search_table'></div>
+<div class="clear"></div>
+
+<script type="text/javascript">
+
+function render_actions(oObj){
+    var links = "<a href='/couchflow/export/"+oObj.aData[0]+"'>exportar mrc</a><br />" +
+              {% if user.is_staff %}
+                "<a href='/couchflow/edit_item/"+oObj.aData[0]+"/'>editar item</a><br />"+
+                "<a href='/couchflow/clone_edit_item/"+oObj.aData[0]+"/'>agregar ejemplar</a><br />"+
+              {% endif %}
+                "<a class='cita' href='/couchflow/get_cita/"+oObj.aData[0]+"/'>cita</a>";
+    return links;
+}
+
+$(function(){
+    if ($("#raw_query").val().length) {
+        var table = render_search_table(render_actions, {
+            extraData: ['raw_query'],
+            input: 'raw_filter'
+        });
+        //table.fnDraw();
+        table.show();
+    }
+
+    function renumber_orderinputs() {
+        $(".orderinput").val(function(index) {
+            return index;
+        });
+    }
+
+    function fields_select_check_item(value, text) {
+        var li = $('<li>').attr("id", "li_" + value).text(text + " ");
+        var floatright = $("<div>").attr("class", "floatright")
+        if ($("#fields_select option[value='"+value+"']").hasClass("field_type_date")) {
+            input_from = $('<input type="text">').attr("name", value + "_from");
+            input_to = $('<input type="text">').attr("name", value + "_to");
+            $([input_from[0], input_to[0]]).addClass("datefield").datepicker({dateFormat: 'yy-mm-dd'});
+            floatright.append(input_from).append(" - ").append(input_to);
+        } else {
+            floatright.append($('<input type="text">').attr("name", value));
+        }
+        floatright.append($('<input type="hidden" class="orderinput">').attr("name", "order_" + value))
+        floatright.append(" "); /* the server side template includes a space here*/
+        floatright.append($('<span>').attr("class", "whitespace").html("&nbsp;"))
+        li.append(floatright);
+        $("#fieldlist").append(li).show();
+
+        var opselect = $("<select>").attr("name", "operator_" + value);
+        add_opt = function(x) {opselect.append($("<option>").text(x).attr("value", x));}
+        add_opt("AND");
+        add_opt("OR");
+        add_opt("NOT");
+        var prev_fr = li.prev().find(".floatright");
+        prev_fr.find("span").remove();
+        prev_fr.append(opselect);
+
+        renumber_orderinputs();
+    }
+
+    function fields_select_uncheck_item(value) {
+        var li = $("#li_" + value);
+        if (!li.is(":first-child")) {
+            var select = li.prev().find("select");
+            var select_parent = select.parent();
+            var cur_select = li.find(".floatright").find("span, select");
+            select.remove();
+            cur_select.detach();
+            select_parent.append(cur_select);
+        }
+        li.remove();
+        if ($("#fieldlist li").length == 0) {
+            $("#fieldlist").hide();
+        }
+        renumber_orderinputs();
+    }
+
+    $("#fields_select").multiselect({
+        noneSelectedText: "Seleccione una opción",
+        click: function(event, ui) {
+            if (ui.checked) {
+                fields_select_check_item(ui.value, ui.text);
+            } else {
+                fields_select_uncheck_item(ui.value);
+            }
+        }
+    });
+    $("#item_type, #obras_consulta, #libraries, #sort, #ascdesc").multiselect({
+        multiple: false,
+        selectedList: 1,
+        header: false,
+        noneSelectedText: "Seleccione una opción"
+    });
+    $("#ascdesc").multiselect("option", "minWidth", 120);
+    $("#ascdesc").multiselect("option", "classes", "novertscroll");
+    $("#item_type").multiselect("option", "classes", "novertscroll");
+    $("#toggle_advanced").toggle(function () {
+            $(this).html("&laquo; Busqueda simple");
+            $(".advanced_search").fadeIn();
+        }, function () {
+            $(this).html("Busqueda avanzada &raquo;");
+            $(".advanced_search").fadeOut();
+        }
+    );
+    $("#item_type").bind("multiselectclick", function(event, ui) {
+        $("#hidden_options option").each(function() {
+            var that = $(this);
+            if (that.is(":selected")) {
+                fields_select_check_item(that.val(), that.text());
+            }
+            $("#fields_select").append(that.detach());
+        })
+        if (ui.value !== '') {
+            $("#fields_select option:not(.item_type_" + ui.value + ")").each(function() {
+                var that = $(this);
+                if (that.hasClass("field_type__ft")) return;
+                fields_select_uncheck_item(that.val());
+                $("#hidden_options").append(that.detach());
+            });
+        }
+        $("#fields_select").multiselect("refresh");
+    })
+
+    $(".datefield").datepicker({dateFormat: 'yy-mm-dd'});
+});
+</script>
+{% endblock%}

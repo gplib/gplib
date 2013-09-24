@@ -1,0 +1,272 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+<html>
+<head>
+<title>Recibo de prestamo</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+@media screen {
+  #wrapper {
+    width: 700px;
+  }
+}
+
+#wrapper {
+  border: 1px solid black: margin: 2em; padding: 2em 3em;
+}
+
+table td {
+  border: 1px solid black;
+}
+
+.fullwidth {
+  width: 100%;
+}
+
+.table1 td {
+  width: 50%;
+}
+
+.ahalfwidth {
+  width: 45%;
+}
+
+.table2 td {
+  width: 10%;
+}
+
+.empty {
+  border: none;
+}
+
+#firma {
+  margin-left: 60%;
+  margin-right: 20%;
+  text-align: center;
+}
+
+</style>
+<script type="text/javascript">
+window.print()
+</script>
+</head>
+<body>
+
+<div id="wrapper">
+
+<table cellspacing="0" class="fullwidth">
+  <tr>
+    <td class="ahalfwidth">
+      <table cellspacing="0" class="table1 fullwidth">
+        <tr>
+          <td>Nombre y apellido:</td>
+          <td>&nbsp;{{user.first_name}} {{user.last_name}}</td>
+        </tr>
+        <tr>
+          <td>DNI:</td>
+          <td>&nbsp;{{user.document_number}} {{user.document_type}}</td>
+        </tr>
+        <tr>
+          <td>Dirección:</td>
+          <td>&nbsp;{{user.address}}</td>
+        </tr>
+        <tr>
+          <td>Telefono:</td>
+          <td>&nbsp;{{user.phone_number}}</td>
+        </tr>
+        <tr>
+          <td>E-mail:</td>
+          <td>&nbsp;{{user.email}}</td>
+        </tr>
+      </table>
+    </td>
+    <td style="width: 10%"></td>
+    <td class="ahalfwidth">
+      <table cellspacing="0" class="table1 fullwidth">
+        <tr>
+          <td>Signatura:</td>
+          <td>&nbsp;{{item.fields_properties.050.list.0.exec_value.0}}</td>
+        </tr>
+        <tr>
+          <td>Vol Num:</td>
+          <td>&nbsp;{{item.fields_properties.510.list.0.subfields.1.exec_value.0}}</td>
+        </tr>
+        <tr>
+          <td>Autor:</td>
+          <td>&nbsp;{{item.fields_properties.100.list.0.subfields.a.exec_value.0}}</td>
+        </tr>
+        <tr>
+          <td>Titulo:</td>
+          <td>&nbsp;{{item.fields_properties.245.list.0.subfields.a.exec_value.0}}</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<br />
+<table cellspacing="0" class="table2">
+  <tr>
+    <td>Vencimiento<br/>&nbsp;{{end}}</td>
+    <td class="empty">&nbsp;</td>
+    <td class="empty">&nbsp;</td>
+    <td>Renovación<br/>&nbsp;</td>
+    <td class="empty">&nbsp;</td>
+    <td>Ven. Ren.<br/>&nbsp;</td>
+    <td class="empty">&nbsp;</td>
+  </tr>
+</table>
+
+<br />
+
+<table cellspacing="0" class="fullwidth">
+  <tr>
+    <td>
+      Reclamos:
+      <br />&nbsp;
+    </td>
+  </tr>
+</table>
+
+<br />
+
+<div id="firma">
+........................... <!--ugly-->
+<br/>Firma
+</div>
+
+<br />
+
+<table cellspacing="0" class="fullwidth">
+  <tr>
+    <td class="ahalfwidth">
+      <table cellspacing="0" class="table1 fullwidth">
+        <tr>
+          <td>Nombre y apellido:</td>
+          <td>&nbsp;{{user.first_name}} {{user.last_name}}</td>
+        </tr>
+        <tr>
+          <td>DNI:</td>
+          <td>&nbsp;{{user.document_number}} {{user.document_type}}</td>
+        </tr>
+        <tr>
+          <td>Dirección:</td>
+          <td>&nbsp;{{user.address}}</td>
+        </tr>
+        <tr>
+          <td>Telefono:</td>
+          <td>&nbsp;{{user.phone_number}}</td>
+        </tr>
+        <tr>
+          <td>E-mail:</td>
+          <td>&nbsp;{{user.email}}</td>
+        </tr>
+      </table>
+    </td>
+    <td style="width: 10%"></td>
+    <td class="ahalfwidth">
+      <table cellspacing="0" class="table1 fullwidth">
+        <tr>
+          <td>Signatura:</td>
+          <td>&nbsp;{{item.fields_properties.050.list.0.exec_value.0}}</td>
+        </tr>
+        <tr>
+          <td>Vol Num:</td>
+          <td>&nbsp;{{item.fields_properties.510.list.0.subfields.1.exec_value.0}}</td>
+        </tr>
+        <tr>
+          <td>Autor:</td>
+          <td>&nbsp;{{item.fields_properties.100.list.0.subfields.a.exec_value.0}}</td>
+        </tr>
+        <tr>
+          <td>Titulo:</td>
+          <td>&nbsp;{{item.fields_properties.245.list.0.subfields.a.exec_value.0}}</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<br />
+<table cellspacing="0" class="table2">
+  <tr>
+    <td>Vencimiento<br/>&nbsp;{{end}}</td>
+    <td class="empty">&nbsp;</td>
+    <td class="empty">&nbsp;</td>
+    <td>Renovación<br/>&nbsp;</td>
+    <td class="empty">&nbsp;</td>
+    <td>Ven. Ren.<br/>&nbsp;</td>
+    <td class="empty">&nbsp;</td>
+  </tr>
+</table>
+
+<br />
+
+<table cellspacing="0" class="fullwidth">
+  <tr>
+    <td>
+      Reclamos:
+      <br />&nbsp;
+    </td>
+  </tr>
+</table>
+</div>
+
+
+</body>
+</html>

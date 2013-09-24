@@ -1,0 +1,186 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "base.html" %}
+{% block extra_head %}
+<script type="text/javascript">
+$(function(){
+        $("#tabs").tabs();
+});
+</script>
+{% endblock %}
+
+{% block title %}{{block.super}} - Administración - Selección de Campos del Buscador{% endblock %}
+{% block subtitle %}Administración <span class="flecha"></span> Selección de Campos del Buscador{% endblock %}
+
+{% block content %}
+
+    <form method="post">
+        <input type="hidden" name="default_type" id="default_type" value="{{default_type}}" />
+        <input class="butGuardar" value="Guardar" type="image" src="/media/images/but_guardar.png">
+    <div id="tabs">
+    <ul>
+        {% for name, id, fields in items %}
+        <li><a href="#tabs-{{id}}">{{name}}</a></li>
+        {% endfor %}
+
+    </ul>
+    {% for name, id, fields in items %}
+    <div id="tabs-{{id}}">
+        <button class="set_default" value="{{name|lower}}" id="set_default_{{name|lower}}" style="float: right;"><span>Establecer predeterminado</span> ({{name}})</button>
+        <br />
+        <h2>Vista</h2>
+        <div>
+            <div id="left" style="width: 140px;float: left;"><img src="/media/images/book.jpg"/></div>
+
+            <div id="rigth" style= "float: left">
+                <div id="ff{{id}}" class="sheepitForm">
+                    <span style="display:inline-block; margin-left: 7px;">R</span> 
+                    <span style="display:inline-block; margin-left: 13px;">F</span>
+                    <span style="display:inline-block; margin-left: 13px;">+</span>
+                    <span style="display:inline-block; margin-left: 13px;">A</span>
+                    <span style="display:inline-block; margin-left: 10px;">Ad</span>
+                    <span style="display:inline-block; margin-left: 10px; margin-right:5px;">E</span>
+                    <span style="display:inline-block; width:90px;">Nombre</span><span>Campo</span>
+
+                    <div id="ff{{id}}_template" class="sheepitSearchForm">
+                        <a id="ff{{id}}_remove_current" style="float:right">
+                           <img src="/media/images/but_cancelarp.png" border="0">
+                        </a>
+
+                        <input id="ff{{id}}_#index#_show" name="{{id}}_#index#_show" type="checkbox" />
+                        <input id="ff{{id}}_#index#_filter" name="{{id}}_#index#_filter" type="checkbox" />
+                        <input id="ff{{id}}_#index#_more" name="{{id}}_#index#_more" type="checkbox" />
+                        <input id="ff{{id}}_#index#_advanced" name="{{id}}_#index#_advanced" type="checkbox" />
+                        <input id="ff{{id}}_#index#_advdef" name="{{id}}_#index#_advdef" type="checkbox" />
+                        <input id="ff{{id}}_#index#_exist" name="{{id}}_#index#_exist" type="checkbox" />
+                        <input id="ff{{id}}_#index#_name" style="width:80px" name="{{id}}_#index#_name" type="text" />
+
+                        <select id="ff{{id}}_#index#_field" name="{{id}}_field" class="search_field_select">
+                            {% for fid, field in fields %}
+                            {% if not field.subfields %}
+                            <option value="#index#_{{fid}}">{{fid}} {{field.name}}</option>
+                            {% else %}
+                                {% for sfid, sfield in field.subfields %}
+                                <option value="#index#_{{sfid}}">{{sfid}} {{field.name}} - {{sfield.name}}</option>
+                                {% endfor %}
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+
+                    </div>
+
+                  <!-- No forms template -->
+                  <div id="ff{{id}}_noforms_template"></div>
+                  <!-- /No forms template-->
+
+                  <!-- Controls -->
+                  <div id="ff{{id}}_controls">
+                      <div id="ff{{id}}_add" style="float:right"><a><span>
+                            <img src="/media/images/but_mas.png" border="0">
+                                  Agregar</span></a></div>
+                  </div>
+                  <!-- /Controls -->
+            </div>
+            </div>
+        <div style="clear:both"></div>
+        </div>
+        <div>R = Mostrar en el resultado de la busqueda</div>
+        <div>F = Usar para filtrar en la busqueda</div>
+        <div>+ = Ocultar en la busqueda y mostrar al seleccionar "Ver más"</div>
+        <div>A = Incluir en busqueda avanzada</div>
+        <div>Ad = Incluir por defecto en busqueda avanzada</div>
+        <div>E = Existencia/Ejemplar/Ect</div>
+    </div>
+    {% endfor %}
+
+    </form>
+</div>
+
+<script type="text/javascript">
+
+function set_default(type_name) {
+  $(".set_default span").text("Establecer predeterminado").parent().prop("disabled", false);
+  $("#set_default_" + type_name + " span").text("Predeterminado").parent().prop("disabled", true);
+  $("#default_type").val(type_name);
+}
+
+$(function(){
+  {% if default_type %}set_default("{{default_type}}"){% endif %}
+  $(".set_default").click(function() {
+    set_default($(this).val())
+    return false;
+  });
+
+  var forms = {};
+  {% for name, id, fields in items %}
+  forms["{{id}}"] = $('#ff{{id}}').sheepIt({
+      separator: '',
+      allowRemoveLast: false,
+      allowRemoveCurrent: true,
+      allowRemoveAll: false,
+      allowAdd: true,
+      allowAddN: false,
+      maxFormsCount: 0,
+      minFormsCount: 1,
+      iniFormsCount: 1
+  });
+  {% endfor %}
+
+    $.getJSON("/search/get_fields",
+      function(data){
+        for(key in data){
+            if (key in forms) {
+                forms[key].inject(data[key]);
+            }
+        }
+    });
+
+});
+</script>
+{% endblock %}

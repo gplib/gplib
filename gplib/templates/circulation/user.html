@@ -1,0 +1,279 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "base.html" %}
+
+{% block body_attrs %}class="circulacionUsuario"{%endblock%}
+
+{% block title %}{{block.super}} - Circulación{% if not show_penalty_alert %} - Usuario - {{userdoc.username}}{% endif %}{% endblock %}
+{% block subtitle %}
+  {% if show_penalty_alert %}
+  Circulación
+  {% else %}
+  Circulación <span class="flecha"></span> Usuario <span class="flecha"></span> {{userdoc.username}}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if show_penalty_alert %}
+<div class="penalizacion">
+<table cellspacing="0">
+  <tbody>
+  <tr>
+    <th>Penalizaciones de usuarios</th>
+  </tr>
+  {% for i in penalty_alert %}
+  <tr>
+      <td>Usuario: {{i.key}} - ({{ i.value.start }} - {{ i.value.end }}) - {{ i.value.cause }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% else %}
+
+<table id="user_profile">
+  <tr>
+    <td width="105px">
+        {% if photo %}<img src="{{photo}}" alt="" />
+{% else %}<img src="images/foto_default.png" alt="" />
+{% endif %}
+</td>
+<td valign="bottom" class="tdDatosUsuario01">
+<div class="bocata circulacionUsuario">
+<div class='arriba'><h1>&nbsp;</h1></div>
+
+<div class='cuerpo-exterior'>
+<div class='cuerpo'>
+<div class='cuerpo-interior'>
+{%if userdoc.first_name%}<p><b>Nombre:</b> {{userdoc.first_name}}</p>{%endif%}
+{%if userdoc.last_name%}<p><b>Apellido:</b> {{userdoc.last_name}}</p>{%endif%}
+{%if userdoc.email%}<p><b>E-mail:</b> {{userdoc.email}}</p>{%endif%}
+</div>
+</div>
+</div>
+<div class='pie-exterior'><div class='pie'><div class='pie-interior'></div></div></div>
+</div>
+<!-- Fin bocata-->
+
+{% if user.is_superuser or userdoc.get_id == user.get_id %}
+<a href="{{editlink}}" class="editar">Editar &raquo;</a>
+{% endif %}
+</td>
+<td class="tdDatosUsuario02">
+{%if userdoc.document_number%}<p><b>Documento (tipo):</b> {{userdoc.document_number}} ({{userdoc.document_type}})</p>{%endif%}
+{%if userdoc.address%}<p><b>Dirección:</b> {{userdoc.address}}</p>{%endif%}
+{%if userdoc.phone_number%}<p><b>Teléfono:</b> {{userdoc.phone_number}}</p>{%endif%}
+{%if userdoc.cellphone_number%}<p><b>Teléfono celular:</b> {{userdoc.cellphone_number}}</p>{%endif%}
+<p><b>Usuario desde:</b><br />
+{{userdoc.date_joined}}</p>
+<p><b>Activo:</b> {%if userdoc.is_active%}Si{%else%}No{%endif%}</p>
+{%if userdoc.comment%}<p><b>Comentario:</b> {{userdoc.comment|linebreaksbr}}</p>{%endif%}
+</td>
+{% if user.is_superuser %}
+<td>
+<p><b>Grupos:</b></p>
+<ul>
+{% for group in groups %}
+<li>{{group}}</li>
+{% endfor %}
+</ul>
+</td>
+{% endif %}
+</tr>
+</table>
+
+{% if userdoc.penalties %}
+<div class="penalizacion">
+<table cellspacing="0">
+<tbody>
+  <tr>
+    <th>Penalizaciones</th>
+  </tr>
+  {% for penalty in userdoc.penalties %}
+  <tr>
+      <td><a href="/circulation/penalty/delete/{{userdoc.get_id}}/{{penalty.id}}">Eliminar</a> - ({{ penalty.start }} - {{ penalty.end }}) - {{ penalty.cause }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+</div>
+<br/>
+{% endif %}
+
+<div id='loan_table'></div>
+
+{% if logs %}
+<div class="penalizacion">
+<table cellspacing="0">
+<tbody>
+  <tr>
+    <th colspan="4">Historial</th>
+  </tr>
+  <tr class="fakeheader">
+    <td style="width: 15%">Acción</td>
+    <td style="width: 15%">Fecha</td>
+    <td style="width: 20%">Número de inventario</td>
+    <td style="width: 50%">Descripción</td>
+  </tr>
+  {% for row in logs %}
+  <tr>
+    <td>{% if row.CirculationLog.type == 'loan' %}Préstamo{% endif %}
+        {% if row.CirculationLog.type == 'return' %}Devolución{% endif %}
+        {% if row.CirculationLog.type == 'renew' %}Renovación{% endif %}</td>
+    <td>{{row.CirculationLog.date}}</td>
+    <td>{{row.WFItem.fields_properties.876.list.0.subfields.a.exec_value.0}}</td>
+    <td>Título: {{row.WFItem.fields_properties.245.list.0.subfields.a.exec_value.0}}<br />
+      Autor: {{row.WFItem.fields_properties.100.list.0.subfields.a.exec_value.0}}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+</div>
+<br/>
+{% endif %}
+
+<script type="text/javascript">
+
+  function render_loan_actions(oObj){
+    {% if is_biblio or user.is_superuser %}
+    if(oObj.aData[2] == "reserva"){
+        var link = '<a class="liveclick" href="/circulation/delete/reserve/' + oObj.aData[0] + '">cancelar</a>';
+        link += '<br/><a class="liveclick" href="/circulation/reserve_to_loan/' + oObj.aData[0] + '">prestar</a>';
+    }else{
+        var link = '<a class="liveclick" href="/circulation/delete/loan/' + oObj.aData[0] + '">devolver</a>';
+        link += '<br/><a class="liveclick" href="/circulation/renew_loan/' + oObj.aData[0] + '">renovar</a>';
+        link += '<br/><a target="_blank" href="/circulation/loan_ticket/' + oObj.aData[0] + '">recibo</a>';
+    }
+    {% else %}
+    if(oObj.aData[2] == "reserva"){
+        var link = '<a class="liveclick" href="/circulation/delete/reserve/' + oObj.aData[0] + '">cancelar</a>';
+    }else{
+        var link = '---------';
+    }
+    {% endif %}
+    return link;
+  }
+
+$(function(){
+   loan_table = render_table('loan_table', '/circulation/user_loans/{{userdoc.get_id}}',
+     [
+       ['id', {"bVisible": 0 }],
+       ['Inv', {sWidth: '5px'}],
+       ['Tipo', {sWidth: '5px'}],
+       ['Titulo', {sWidth: '325px'}],
+       'Comienzo',
+       'Fin',
+       ['Acciones', {'fnRender': render_loan_actions, 'sWidth': '20px'}],
+
+       ], ["filter"], false);
+
+  var loan_table_header = $("#loan_table .fg-toolbar:first");
+  var new_loan_a = $('<a id="new_loan" href="#loan">Nuevo Prestamo</a>');
+  loan_table_header.prepend($("<h2>Préstamos</h2>"))
+  loan_table_header.prepend(new_loan_a)
+
+  new_loan_a.click(function(){
+      $.openPopupLayer({
+         name: "new_loan",
+         width: 800,
+         url: '/circulation/search/{{userdoc.get_id}}',
+         cache: false,
+         success: function() {}
+      });
+
+    });
+
+   $('.liveclick').live('click', function(event){
+       event.preventDefault();
+       var atext = $(this).text();
+       if(atext == 'prestar'){
+            // pass
+       }else if(atext == 'devolver'){
+           if(confirm('Seguro que desea devolver el item?') != true){
+             return;
+           }
+        }else if(atext == 'cancelar'){
+           if(confirm('Seguro que desea cancelar la reserva?') != true){
+             return;
+           }
+        }else if(atext == 'renovar'){
+           if(confirm('Seguro que desea renovar el prestamo?') != true){
+             return;
+           }
+        }
+       var url = $(this).attr('href');
+       $.ajax({
+           dataType: 'json',
+           url: url,
+           success: function(data){
+               var item = data['item'];
+               var error = data['error'];
+               var stat = data['status'];
+               var what = data['what'];
+               if(error){
+                  alert(error);
+               }
+               loan_table.fnDraw();
+
+               if(stat == 'loan removed' && what != 'reserve' &&
+                 confirm('Desea imprimir el recibo de devolución?') == true){
+                 var url = '/circulation/return_loan_ticket/{{userdoc.get_id}}/' + item;
+                 window.open(url);
+               }
+           }
+       });
+   });
+
+
+});
+</script>
+{% endif %}
+{% endblock %}

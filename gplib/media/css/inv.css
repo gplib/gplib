@@ -1,0 +1,397 @@
+h1, h2, h3, h4, h5, h6, p, form {
+    margin: 0px;
+    padding:0px;
+}
+
+.clear {
+    clear: both;
+}
+
+#user a {
+    text-decoration: none;
+    color: green;
+}
+
+#user a:hover{
+    text-decoration: none;
+}
+
+div#ui-widget-content #contenido h2 {
+    background-color: #f2f6e2;
+    margin-left: 30px;
+    display: block;
+    padding: 4px;
+    width: 100px;
+    text-align: center;
+    -webkit-border-top-left-radius: 25px;
+    -webkit-border-top-right-radius: 25px;
+    -moz-border-radius-topleft: 25px;
+    -moz-border-radius-topright: 25px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+div.ui-widget div {
+    font-size: 11px;
+}
+#contenido h2 {
+    font-size:18px;
+    font-weight:normal;
+    text-decoration:none;
+    padding-left:0px;
+    padding-bottom:5px;
+}
+
+.orangetext {
+    font-size:15px;
+    color:#EE8907;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+#email {
+    float:left;
+    width:500px;
+    background-color:#9BBE00;
+    height:27px;
+    padding-top:5px;
+}
+
+#email a{
+    font-size:15px;
+    color:#fff;
+    font-weight:normal;
+    text-decoration:underline;
+    padding:0px 40px;
+}
+
+#email a:hover{
+    font-size:15px;
+    color:#fff;
+    font-weight:normal;
+    text-decoration:none;
+    padding:0px 40px;
+
+}
+
+#validtext {
+    float:left;
+    width:278px;
+    background-color:#9BBE00;
+    height:27px;
+    padding-top:5px;
+}
+
+#validtext p{
+    font-size:15px;
+    color:#fff;
+    font-weight:normal;
+    text-decoration:none;
+    text-align:right;
+    padding-right:35px;
+}
+
+#validtext a{
+    font-size:15px;
+    color:#fff;
+    font-weight:normal;
+    text-decoration:underline;
+}
+
+#validtext a:hover{
+    font-size:15px;
+    color:#fff;
+    font-weight:normal;
+    text-decoration:none;
+}
+
+
+
+
+/* Not Template */
+.node-level{
+    clear:both;
+    padding-top: 15px;
+}
+
+
+.conector{
+    float:left;
+    padding-right: 50px;
+    padding-left: 40px;
+
+}
+
+
+.task{
+    float: left;
+    color: #788d4b;
+    padding-right: 50px;
+    padding-left: 50px;
+
+}
+
+.level{
+    clear: both;
+    color: #788d4b;
+    padding-right: 50px;
+    padding-left: 50px;
+
+}
+
+.task_square{
+    width: 280px;
+    float: left;
+    border-style: groove;
+    color: #788D4B;
+    margin-bottom: 10px;
+    margin-right: 15px;
+    padding: 10px 50px 60px;
+
+}
+.task_square p{
+    font-size: 9px;
+} 
+.task_square_active{
+    width: 280px;
+    float: left;
+    border-style: groove;
+    color: #788D4B;
+    margin-bottom: 10px;
+    margin-right: 15px;
+    padding: 10px 50px 60px;
+    background: none repeat scroll 0 0 red;
+}
+
+.task_square_finished{
+    width: 280px;
+    float: left;
+    border-style: groove;
+    color: #788D4B;
+    margin-bottom: 10px;
+    margin-right: 15px;
+    padding: 10px 50px 60px;
+    background: none repeat scroll 0 0 green;
+}
+
+.task_square_inactive{
+    width: 280px;
+    float: left;
+    border-style: groove;
+    color: #788D4B;
+    margin-bottom: 10px;
+    margin-right: 15px;
+    padding: 10px 50px 60px;
+    background: none repeat scroll 0 0 grey;
+}
+
+.task_square h2{
+    color:red;
+}
+
+.task-level {
+    clear: both;
+}
+
+.active-task{
+    float: left;
+    background-color: red;
+    padding-right: 50px;
+    padding-left: 50px;
+
+}
+
+#world {
+  background-color: white;
+  margin: 0 auto 0 auto;
+  width: 820px;
+  height: 580px;
+  border: 3px solid gray;
+  border-radius: 30px;
+  -moz-border-radius: 30px;
+}
+
+#error{
+    color: red;
+    font-size: medium;
+    text-align: center;
+}
+
+/* TODO: gama */
+  input.text {margin-bottom:12px; width:95%; padding: .4em;}
+  fieldset {padding:0; border:0; margin-top:25px;}
+  h1 {font-size: 1.2em; margin: .6em 0;}
+  div#users-contain {width: 350px; margin: 20px 0;}
+  div#users-contain table {margin: 1em 0; border-collapse: collapse; width: 100%; }
+  div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+  .ui-dialog .ui-state-error { padding: .3em; }
+  .validateTips { border: 1px solid transparent; padding: 0.3em; }
+/* ENDTODO */
+
+.ui-widget {
+    font-size: 62.5%;
+}
+
+#toolbar {
+    background-color: #85B200;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    margin: 5px 25px;
+    padding: 2px;
+}
+
+#toolbar a{
+  padding: 0 10px;
+  color: white;
+}
+
+#toolbar a:hover{
+  color: red;
+}
+
+.fieldWrapper {
+  display: inline;
+}
+
+
+#loginform {
+    background-color: #9ACA5A;
+    border-radius: 11px 11px 11px 11px;
+    -moz-border-radius: 11px 11px 11px 11px;
+    margin: 0 auto;
+    padding: 12px;
+}
+
+#incorrect-user {
+    text-align: center;
+    margin: 10px;
+}
+
+#user{
+    float: right;
+    font-weight: bold;
+}
+
+.field {
+  background-color: white;
+  margin: 4px auto 2px auto;
+  border: 1px solid gray;
+  border-radius: 15px;
+  padding: 5px;
+}
+.subfield{
+  padding: 2px;
+}
+
+
+.sheepitForm a {
+    cursor:pointer;
+}
+
+.img-button{
+    cursor:pointer;
+}
+
+.search_more {
+    display: none;
+}
+
+#search-box{
+  margin: -24px auto 20px auto;
+  width: 250px;
+}
+#search_table_table td{
+    vertical-align: top;
+}
+
+.search_field_select{
+    width: 340px;
+}
+.sheepitSearchForm {
+    width: 530px;
+    vertical-align: bottom;
+    clear: both;
+}
+.sheepitSearchForm select {
+	width: 460px;
+	border: 1px solid #C06;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.sheepitSearchForm input {
+	border: 1px solid #C06;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.sheepitSearchForm  img {
+	margin-top: 20px;
+}
+
+.clean .ui-datepicker {
+  position: absolute;
+  font-size: 12px;
+  z-index: 9999999;
+}
+.clean .ui-datepicker td{
+  padding: 2px!important;
+}
+
+#id_description_task{
+  width: 100%;
+  height: 42px;
+}
+
+.tematres_info, #terms{
+  background: none repeat scroll 0 0 #CCCCCC;
+  border: 1px solid #999999;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 11px 11px 11px 11px;
+  -moz-border-radius: 11px 11px 11px 11px;
+}
+.tematres_info label, #terms label{
+  font-weight: bold;
+}
+
+.related_term{
+  background: none repeat scroll 0 0 #0066FF;
+  font-size: 10px;
+  padding: 3px;
+  border-radius: 11px 11px 11px 11px;
+  -moz-border-radius: 11px 11px 11px 11px;
+  color: white;
+}
+.term div{
+  margin-bottom: 10px!important;
+}
+.task_description{
+  font: 19px/1.5em bold;
+}
+
+.ui-autocomplete-category {
+  font-weight: bold;
+  padding: .2em .4em;
+  margin: .8em 0 .2em;
+  line-height: 1.5;
+}
+
+.ui-autocomplete {
+  max-height: 150px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+  /* add padding to account for vertical scrollbar */
+  padding-right: 20px;
+}
+* html .ui-autocomplete {
+  height: 150px;
+}
+
+.ui-autocomplete-loading {
+  background: white url('../images/ui-anim_basic_16x16.gif') right center no-repeat !important;
+}
+
+.item_task_title {
+  margin: 20px 0 0!important;
+  font-size: 22px!important;
+  color: fuchsia!important;
+}

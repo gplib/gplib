@@ -1,0 +1,143 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "webconf/couchflow/base.html" %}
+
+{% block extra_head %}
+<script type="text/javascript" src="/media/js/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="/media/js/jquery.jstree.js"></script>
+<script type="text/javascript" src="/media/js/menueditor.js"></script>
+<link href="/media/css/jstree/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+#menutree {
+    font-size: 0.8em;
+    border: 1px solid #ccc;
+    float: left;
+    width: 300px;
+    padding: 0.5em;
+}
+
+#menutree a {
+    color: black;
+    font-weight: normal;
+    font-size: 11px;
+}
+
+#menusidebar {
+    font-size: 0.8em;
+    overflow: hidden;
+    padding: 1em;
+}
+
+#menusidebar button {
+    margin: 2px;
+    padding: 2px 4px;
+}
+
+#editingarea {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    margin: 0.5em;
+}
+
+#editingarea label {
+    display: block;
+}
+</style>
+{% endblock %}
+
+{% block title %}{{block.super}} - Administración - Edtar menú{% endblock %}
+{% block subtitle %}Administración <span class="flecha"></span> Edtar menú{% endblock %}
+
+{% block content %}
+
+<div id="menutree">
+</div>
+
+<div id="menusidebar">
+<button id="menucreate1">Crear categoria</button>
+<button id="menucreate2">Crear submenu</button><br />
+<button id="menuremove">Eliminar</button>
+<button id="menurename">Renombrar</button>
+<button id="menusave">Guardar</button>
+
+<div id="editingarea" style="display: none;">
+<label>Destino
+<select id="menuitemtarget">
+<option selected="selected"></option>
+<optgroup label="Destinos internos">
+    <option value="/">Inicio</option>
+    <option value="/couchflow/item_delete/">Baja de item</option>
+    <option value="/circulation/">Circulación</option>
+    <option value="/circulation/loan/return/">Circulación - Devolución</option>
+    <option value="/sviews/tech_process/">Procesos técnicos</option>
+    <option value="/couchflow/search_references">Buscador de Referencias</option>
+    <option value="/couchflow/stats">Estadisticas y reportes</option>
+</optgroup>
+<optgroup label="Workflows">
+{% for wf in workflows %}
+    <option value="/couchflow/exec/{{wf.workflow_type}}">{{wf.name}}</option>
+{% endfor %}
+</optgroup>
+</select>
+</label>
+
+<label><input type="checkbox" id="menuitemgroup" value="1" /> Grupos</label>
+<select id="menuitemgrouplist" disabled="disabled" multiple="multiple">
+{% for group in groups %}
+    <option value="{{group.get_id}}">{{group.name}}</option>
+{% endfor %}
+</select>
+<br />
+
+<button id="menuapply">Aplicar</button>
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,172 @@
+<!--
+ Este archivo es parte de GPLib - http://gplib.org/
+
+ GPlib es software libre desarrollado en la Facultad de Filosofía y Letras de
+ la Universidad de Buenos Aires y liberado bajo los términos de la licencia
+ GPLIB FILO www.gplib.org/licencia bajo los términos de GPL de  GNU.  Usted
+ puede redistribuirlo y/o modificarlo bajo los términos de la licencia GPLIB
+ FILO de GNU General  Public License como esta publicado en la Free Software
+ Foundation, tanto en la versión 3 de la licencia,  o cualquiera de las
+ versiones futuras Gplib es distribuido con el objetivo de que sea útil, pero
+ SIN NINGUNA GARANTÍA DE FUNCIONAMIENTO; ni siquiera la garantía implícita de
+ que sirva para un propósito particular.  Cuando implemente este sistema
+ sugerimos el registro en www.gplib.org/registro, con el fin de fomentar una
+ comunidad de usuarios de GPLib.  Ver la GNU General Public License para más
+ detalles.http://www.gnu.org/licenses/>
+
+
+ Este arquivo é parte do GPLib http://gplib.org/
+
+ GPLib é sofware livre desenviolvido na Faculdade de Filosofia e Letras da
+ Universidade de Buenos Aires e liberado sob os termos da licença GPLib FILO
+ www.gplib.org/licencia/ sob os termos de GPL de GNU.  Você pode redistribuí-lo
+ e/ou modificá-lo sob os termos da licença pública geral GNU como publicado na
+ Free Software Foundation , tanto na   versão 3 da licença ou  quaisquer
+ versões futuras.  GPLib é distribuído com o objetivo de que seja útil, mas SEM
+ QUALQUER GARANTIA DE PERFORMANCE; nem a garantia implícita de que servem a uma
+ finalidade específica.  Quando  você implementar este sistema sugerimos o
+ registro em www.gplib.org/registro/, a fim de promover uma comunidade de
+ usuarios do GPLib.  Veja a GNU General Public License para mais detalles.
+ http://www.gnu.org/licenses/
+
+
+ This file is part of GPLib - http://gplib.org/
+
+ GPLib is free software developed by Facultad de Filosofia y Letras Universidad
+ de Buenos Aires and distributed under the scope of GPLIB FILO
+ www.gplib.org/license and the GPL Public License GNU.  You can redistribute it
+ and/or modify it under the terms of the GPLIB FILO GNU General Public License
+ as published by the Free Software Foundation, either version 3 of the License,
+ or  (at your option) any later version.
+
+ GPLib is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  After roll your  own version of GPLIB you may register
+ at www.gplib.org/register to buld a comunity of users and developers.  See the
+ GNU General Public License for more details.
+-->
+
+{% extends "basepopup.html" %}
+{% block content%}
+<div class="ResultadoBusqueda">
+<h1>Libro</h1>
+<!-- Inicio bocata-->
+<div class="bocata ResultadoBusqueda">
+  <div class='arriba'>
+    <h1>&nbsp;</h1>
+  </div>
+
+  <div class='cuerpo-exterior'>
+    <div class='cuerpo'>
+      <div class='cuerpo-interior'>
+        Buscar y seleccionar libro para prestar o reservar para ese usuario
+      </div>
+    </div>
+    <div class='pie-exterior'>
+      <div class='pie'>
+        <div class='pie-interior'>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fin bocata-->
+
+
+<div id="search-box-circ">
+<input id="filter" value="{{query}}" />
+<input src="/media/images/lupa.png" value="submit" type="image" class="SinBorde" id="subfilter">
+</div>
+<div id='search_table'></div>
+<div id="dialog" style="display:none"><input id="date"/></div>
+
+</div>
+
+<script type="text/javascript">
+  function render_actions(oObj){
+      {% if user.is_staff or user.is_superuser %}
+        var link = '<a class="liveloan" href="/circulation/add/loan/{{userdoc.get_id}}/' + oObj.aData[0] + '/room">prestar&nbsp;en&nbsp;sala</a>';
+        link += '<br><a class="liveloan" href="/circulation/add/loan/{{userdoc.get_id}}/' + oObj.aData[0] + '/home">prestar&nbsp;a&nbsp;domicilio</a>';
+        link += '<br><span class="clean"><a class="livereserve" href="/circulation/add/reserve/{{userdoc.get_id}}/' + oObj.aData[0] + '">reservar</a></span>';
+      {% else %}
+        var link = '<span class="clean"><a class="livereserve" href="/circulation/add/reserve/{{userdoc.get_id}}/' + oObj.aData[0] + '">reservar</a></span>';
+      {% endif %}
+    return link;
+  }
+
+function render_info(oObj){
+  var output = "";
+  var data = $("<div>"+oObj.aData[2]+"</div>");
+  data.find(".existence").each(function(){
+    var obj = $(this);
+    var docid = obj.attr("id");
+
+    {% if user.is_staff or user.is_superuser %}
+      var link = '<a class="liveloan" href="/circulation/add/loan/{{userdoc.get_id}}/' + docid + '/room">prestar&nbsp;en&nbsp;sala</a>';
+      link += '<br><a class="liveloan" href="/circulation/add/loan/{{userdoc.get_id}}/' + docid + '/home">prestar&nbsp;a&nbsp;domicilio</a>';
+      link += '<br><span class="clean"><a class="livereserve" href="/circulation/add/reserve/{{userdoc.get_id}}/'+ docid +'">reservar</a></span>';
+    {% else %}
+      var link = '<span class="clean"><a class="livereserve" href="/circulation/add/reserve/{{userdoc.get_id}}/'+ docid +'">reservar</a></span>';
+    {% endif %}
+    obj.append(link);
+  });
+  output = data.html();
+  return output;
+}
+
+$(function(){
+    var table_config = {"actions_visible": false, "render_info": render_info};
+    var table = render_search_table(render_actions, table_config);
+
+    $("#search-box-circ").appendTo("#search_table .fg-toolbar:first");
+
+    // remove all callbacks
+    $('.liveloan').die();
+    $('.livereserve').die();
+
+    $('.liveloan').live('click', function(event){
+        event.preventDefault();
+        var url = $(this).attr("href");
+        $.ajax({
+            dataType: "json",
+            url: url,
+            success: function(data){
+                var error = data['error'];
+                var stat = data['status'];
+                if(error){
+                    alert(error);
+                    return;
+                }
+                // TODO: find a better way
+                loan_table.fnDraw();
+                $.closePopupLayer();
+             }
+        });
+    });
+
+    $('.livereserve').live('click', function(event){
+       event.preventDefault();
+       function selectedDate(text, inst){
+            var a = $(this).find(".livereserve");
+            var url = a.attr("href");
+            $.ajax({
+                 dataType: "json",
+                 url: url,
+                 data: {"date": text},
+                 success: function(data){
+                     var error = data['error'];
+                     var stat = data['status'];
+                     if(error){
+                        alert(error);
+                     }
+                     loan_table.fnDraw();
+                 }
+            });
+
+            $.closePopupLayer();
+       }
+       $(this).parent().datepicker({onSelect: selectedDate}).datepicker('show');
+    });
+});
+</script>
+{% endblock %} 
